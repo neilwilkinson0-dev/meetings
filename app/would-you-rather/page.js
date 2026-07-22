@@ -1,29 +1,29 @@
 import Link from "next/link";
 
-export default function Home() {
+export default function WouldYouRather() {
   return (
     <main className="page">
-      <p className="eyebrow">Neil&apos;s meeting games</p>
-      <h1 className="page-title">Pick tonight&apos;s show</h1>
+      <p className="eyebrow">
+        <Link href="/">← All games</Link>
+      </p>
+      <h1 className="page-title">Would You Rather</h1>
       <p className="subtitle">
-        Choose a game to kick the meeting off. Each one has its own settings
-        and its own stage.
+        The wheel picks a person, the cards pick a question, and they have to
+        choose. No repeats — everyone gets a turn.
       </p>
 
       <div className="card-grid">
-        <Link href="/would-you-rather" className="game-card marquee">
-          <h2>Would You Rather</h2>
-          <p>
-            The wheel picks a person, the cards pick a question, and they have
-            to choose. No repeats — everyone gets a turn.
-          </p>
+        <Link href="/would-you-rather/play" className="game-card marquee">
+          <h2>Play</h2>
+          <p>Spin the wheel and start the show.</p>
           <span className="play-hint">Enter the stage →</span>
         </Link>
 
-        <div className="game-card marquee soon">
-          <h2>Coming soon</h2>
-          <p>The next game goes here. The stage is being built.</p>
-        </div>
+        <Link href="/would-you-rather/settings" className="game-card marquee">
+          <h2>Settings</h2>
+          <p>Manage who&apos;s in the room and the question deck.</p>
+          <span className="play-hint">Edit setup →</span>
+        </Link>
       </div>
     </main>
   );
