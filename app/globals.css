@@ -651,6 +651,107 @@ button {
   animation: name-pop 0.55s cubic-bezier(0.2, 1.6, 0.4, 1) both;
 }
 
+/* ---------- Time Travel ---------- */
+
+.question-banner {
+  font-family: var(--font-display), sans-serif;
+  color: var(--pink);
+  font-size: clamp(24px, 4vw, 38px);
+  text-align: center;
+  max-width: 900px;
+  margin-bottom: 8px;
+}
+
+.qr-wrap {
+  background: #fff;
+  padding: 16px;
+  border-radius: 16px;
+  display: inline-flex;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.35);
+}
+
+.qr-wrap img {
+  display: block;
+  width: 200px;
+  height: 200px;
+}
+
+.scan-hint {
+  color: var(--ink-dim);
+  font-size: 16px;
+  margin-top: 12px;
+  text-align: center;
+}
+
+.countdown {
+  font-family: var(--font-display), sans-serif;
+  font-size: clamp(48px, 10vw, 96px);
+  color: var(--gold);
+  text-shadow: 0 6px 0 rgba(0, 0, 0, 0.4);
+}
+
+.entry-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 14px;
+  margin-top: 14px;
+  width: 100%;
+  max-width: 1000px;
+}
+
+.entry-card {
+  background: rgba(34, 26, 94, 0.55);
+  border: 1px solid var(--panel-edge);
+  border-radius: 12px;
+  padding: 14px 16px;
+  text-align: left;
+}
+
+.entry-card .entry-name {
+  color: var(--gold);
+  font-weight: 800;
+  font-size: 15px;
+  margin-bottom: 4px;
+}
+
+.entry-card .entry-idea {
+  color: var(--ink);
+  font-size: 17px;
+  line-height: 1.4;
+}
+
+.round-block {
+  border: 1px solid var(--panel-edge);
+  border-radius: 12px;
+  padding: 14px 18px;
+  margin-bottom: 10px;
+}
+
+.round-block summary {
+  cursor: pointer;
+  font-weight: 700;
+  list-style: none;
+}
+
+.round-block summary::-webkit-details-marker {
+  display: none;
+}
+
+.round-block summary::before {
+  content: "▸ ";
+  color: var(--gold);
+}
+
+.round-block[open] summary::before {
+  content: "▾ ";
+}
+
+.round-meta {
+  color: var(--ink-dim);
+  font-size: 14px;
+  margin-top: 4px;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .bulb,
   .marquee::before {
