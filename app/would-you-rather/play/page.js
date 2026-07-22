@@ -123,7 +123,7 @@ function Sparks() {
 
 export default function Play() {
   const [phase, setPhase] = useState("loading");
-  // phases: loading | error | wheel | flash | reveal | choose | locked | done
+  // phases: loading | error | wheel | flash | reveal | choose | locked | roundComplete
   const [remaining, setRemaining] = useState([]);
   const [questions, setQuestions] = useState([]);
   const [usedQuestionIds, setUsedQuestionIds] = useState([]);
@@ -137,6 +137,7 @@ export default function Play() {
   const sessionId = useRef(null);
   const winnerRef = useRef(null);
   const timers = useRef([]);
+  const allPeopleRef = useRef([]);
 
   useEffect(() => {
     sessionId.current = crypto.randomUUID();
@@ -161,6 +162,7 @@ export default function Play() {
         setPhase("error");
         return;
       }
+      allPeopleRef.current = p;
       setRemaining(p);
       setQuestions(q);
       setPhase("wheel");
@@ -237,12 +239,33 @@ export default function Play() {
     }
     later(() => {
       const next = remaining.filter((p) => p.id !== current.id);
-      setRemaining(next);
       setCurrent(null);
       setQuestion(null);
       setCyclingText("");
-      setPhase(next.length === 0 ? "done" : "wheel");
+      if (next.length === 0) {
+        setPhase("roundComplete");
+        later(() => {
+          setRemaining(allPeopleRef.current);
+          setPhase("wheel");
+        }, 1800);
+      } else {
+        setRemaining(next);
+        setPhase("wheel");
+      }
     }, 1300);
+  }
+
+  function resetGame() {
+    timers.current.forEach(clearTimeout);
+    timers.current = [];
+    setSpinning(false);
+    setRotation(0);
+    setCurrent(null);
+    setQuestion(null);
+    setCyclingText("");
+    setUsedQuestionIds([]);
+    setRemaining(allPeopleRef.current);
+    setPhase("wheel");
   }
 
   if (phase === "loading") {
@@ -264,29 +287,39 @@ export default function Play() {
     );
   }
 
-  if (phase === "done") {
+  if (phase === "roundComplete") {
     return (
       <main className="stage">
         <Sparks />
         <h1 className="done-title">That&apos;s everyone!</h1>
-        <div className="btn-row" style={{ marginTop: 40 }}>
-          <Link href="/would-you-rather" className="btn big">
-            Back to the lobby
-          </Link>
-        </div>
+        <p className="stage-count" style={{ marginTop: 18 }}>
+          Resetting the wheel — here we go again…
+        </p>
       </main>
     );
   }
 
+  const askedCount = new Set(usedQuestionIds).size;
+
   return (
     <main className="stage">
       <div className="stage-topbar">
-        <Link href="/would-you-rather" className="text-link">
-          ← Leave the show
-        </Link>
-        <span className="stage-count">
-          {remaining.length} still on the wheel
-        </span>
+        <div className="topbar-left">
+          <Link href="/would-you-rather" className="text-link">
+            ← Leave the show
+          </Link>
+          <button className="text-link reset-link" onClick={resetGame}>
+            ↺ Reset
+          </button>
+        </div>
+        <div className="topbar-right">
+          <span className="stage-count">
+            {remaining.length} still on the wheel
+          </span>
+          <span className="stage-count">
+            {askedCount}/{questions.length} questions asked
+          </span>
+        </div>
       </div>
 
       <Wheel
@@ -340,7 +373,6 @@ export default function Play() {
                     {question.option_b}
                   </button>
                 </div>
-                {phase === "locked" && <p className="locked">✔ Locked in</p>}
               </>
             )}
           </div>

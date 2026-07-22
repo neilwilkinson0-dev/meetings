@@ -58,7 +58,7 @@ button {
 
 .eyebrow {
   color: var(--gold);
-  font-size: 13px;
+  font-size: 15px;
   font-weight: 700;
   letter-spacing: 0.22em;
   text-transform: uppercase;
@@ -67,7 +67,7 @@ button {
 
 .page-title {
   font-family: var(--font-display), sans-serif;
-  font-size: clamp(30px, 6vw, 52px);
+  font-size: clamp(34px, 6.5vw, 58px);
   line-height: 1.05;
   text-shadow: 0 4px 0 rgba(0, 0, 0, 0.35);
 }
@@ -75,7 +75,7 @@ button {
 .subtitle {
   color: var(--ink-dim);
   margin-top: 12px;
-  font-size: 17px;
+  font-size: 19px;
   max-width: 55ch;
 }
 
@@ -133,14 +133,14 @@ button {
 
 .game-card h2 {
   font-family: var(--font-display), sans-serif;
-  font-size: 26px;
+  font-size: 29px;
   color: var(--gold);
   margin-bottom: 10px;
 }
 
 .game-card p {
   color: var(--ink-dim);
-  font-size: 15px;
+  font-size: 17px;
   line-height: 1.5;
 }
 
@@ -149,7 +149,7 @@ button {
   margin-top: 18px;
   color: var(--cyan);
   font-weight: 700;
-  font-size: 14px;
+  font-size: 16px;
   letter-spacing: 0.12em;
   text-transform: uppercase;
 }
@@ -176,7 +176,7 @@ button {
   border: none;
   border-radius: 999px;
   padding: 16px 34px;
-  font-size: 17px;
+  font-size: 19px;
   font-weight: 800;
   letter-spacing: 0.04em;
   color: var(--dark-text);
@@ -208,7 +208,7 @@ button {
 }
 
 .btn.big {
-  font-size: 22px;
+  font-size: 26px;
   padding: 20px 48px;
 }
 
@@ -221,12 +221,21 @@ button {
 
 .text-link {
   color: var(--ink-dim);
-  font-size: 14px;
+  font-size: 16px;
   border-bottom: 1px dotted var(--ink-dim);
 }
 
 .text-link:hover {
   color: var(--ink);
+}
+
+.reset-link {
+  background: none;
+  border: none;
+  padding: 0;
+  font: inherit;
+  font-size: 16px;
+  border-bottom: 1px dotted var(--ink-dim);
 }
 
 /* ---------- Panels / settings ---------- */
@@ -240,14 +249,14 @@ button {
 
 .panel h2 {
   font-family: var(--font-display), sans-serif;
-  font-size: 20px;
+  font-size: 22px;
   color: var(--cyan);
   margin-bottom: 4px;
 }
 
 .panel .hint {
   color: var(--ink-dim);
-  font-size: 13px;
+  font-size: 15px;
   margin-bottom: 18px;
 }
 
@@ -272,7 +281,7 @@ button {
   background: var(--stage-deep);
   color: var(--ink);
   padding: 12px 14px;
-  font-size: 15px;
+  font-size: 17px;
   font-family: inherit;
 }
 
@@ -307,7 +316,7 @@ button {
   border: 1px solid transparent;
   border-radius: 10px;
   padding: 10px 14px;
-  font-size: 15px;
+  font-size: 17px;
 }
 
 .item-row:hover {
@@ -322,7 +331,7 @@ button {
 .item-row .or {
   color: var(--gold);
   font-weight: 800;
-  font-size: 12px;
+  font-size: 13px;
   text-transform: uppercase;
   flex: none;
 }
@@ -332,7 +341,7 @@ button {
   border: none;
   background: transparent;
   color: var(--ink-dim);
-  font-size: 15px;
+  font-size: 17px;
   padding: 4px 8px;
   border-radius: 8px;
 }
@@ -349,7 +358,7 @@ button {
 
 .empty {
   color: var(--ink-dim);
-  font-size: 14px;
+  font-size: 16px;
   padding: 14px 4px;
 }
 
@@ -375,12 +384,12 @@ button {
   border-radius: 12px;
   border: 1px solid var(--panel-edge);
   background: rgba(13, 9, 48, 0.55);
-  font-size: 15px;
+  font-size: 17px;
 }
 
 .chip strong {
   color: var(--gold);
-  font-size: 20px;
+  font-size: 22px;
   margin-right: 8px;
   font-family: var(--font-display), sans-serif;
 }
@@ -410,9 +419,22 @@ button {
   z-index: 5;
 }
 
+.topbar-left {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.topbar-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
+}
+
 .stage-count {
   color: var(--ink-dim);
-  font-size: 14px;
+  font-size: 17px;
   letter-spacing: 0.08em;
   text-transform: uppercase;
 }
@@ -492,14 +514,14 @@ button {
   font-weight: 800;
   letter-spacing: 0.3em;
   text-transform: uppercase;
-  font-size: 15px;
+  font-size: 18px;
   margin-bottom: 18px;
   animation: rise-in 0.4s ease both;
 }
 
 .flash-name {
   font-family: var(--font-display), sans-serif;
-  font-size: clamp(44px, 11vw, 110px);
+  font-size: clamp(48px, 11vw, 116px);
   line-height: 1;
   color: var(--gold);
   text-shadow:
@@ -557,12 +579,12 @@ button {
 .reveal-card .q-label {
   font-family: var(--font-display), sans-serif;
   color: var(--pink);
-  font-size: clamp(20px, 4vw, 30px);
+  font-size: clamp(23px, 4.3vw, 34px);
   margin-bottom: 26px;
 }
 
 .cycling {
-  font-size: clamp(17px, 3vw, 24px);
+  font-size: clamp(19px, 3.2vw, 27px);
   color: var(--ink-dim);
   min-height: 3em;
   display: flex;
@@ -588,7 +610,7 @@ button {
   border: none;
   border-radius: 16px;
   padding: 26px 22px;
-  font-size: clamp(17px, 2.6vw, 22px);
+  font-size: clamp(20px, 3vw, 26px);
   font-weight: 800;
   line-height: 1.35;
   color: var(--dark-text);
@@ -618,21 +640,12 @@ button {
   justify-content: center;
   font-family: var(--font-display), sans-serif;
   color: var(--pink);
-  font-size: 24px;
-}
-
-.locked {
-  margin-top: 26px;
-  color: var(--cyan);
-  font-weight: 800;
-  font-size: 18px;
-  letter-spacing: 0.06em;
-  animation: name-pop 0.4s ease both;
+  font-size: 27px;
 }
 
 .done-title {
   font-family: var(--font-display), sans-serif;
-  font-size: clamp(38px, 8vw, 80px);
+  font-size: clamp(40px, 8vw, 84px);
   color: var(--gold);
   text-shadow: 0 6px 0 rgba(0, 0, 0, 0.4);
   animation: name-pop 0.55s cubic-bezier(0.2, 1.6, 0.4, 1) both;
