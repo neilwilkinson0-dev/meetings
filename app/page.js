@@ -55,6 +55,16 @@ export default function Home() {
             <span className="play-hint">Enter the stage →</span>
           </Link>
 
+          <Link href="/ideas" className="game-card marquee">
+            <h2>Ideas Board</h2>
+            <p>
+              Pitch a feature, vote it up or down, and hash it out in the
+              comments. Top ideas get linked to a Jira ticket so everyone can
+              watch them land.
+            </p>
+            <span className="play-hint">Enter the stage →</span>
+          </Link>
+
           <div className="game-card marquee soon">
             <h2>Coming soon</h2>
             <p>The next game goes here. The stage is being built.</p>
