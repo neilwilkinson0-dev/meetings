@@ -752,6 +752,33 @@ button {
   margin-top: 4px;
 }
 
+/* ---------- Countdown Timer ---------- */
+
+.timer-display {
+  font-family: var(--font-display), sans-serif;
+  font-size: clamp(90px, 22vw, 260px);
+  line-height: 1;
+  color: var(--gold);
+  text-shadow: 0 8px 0 rgba(0, 0, 0, 0.4);
+  margin-top: 20px;
+  font-variant-numeric: tabular-nums;
+}
+
+.timer-done {
+  color: var(--pink);
+  animation: timer-pulse 1s ease-in-out infinite;
+}
+
+@keyframes timer-pulse {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .bulb,
   .marquee::before {
@@ -760,7 +787,8 @@ button {
   .flash-name,
   .done-title,
   .option-btn,
-  .flash-label {
+  .flash-label,
+  .timer-done {
     animation-duration: 0.01s;
   }
 }
