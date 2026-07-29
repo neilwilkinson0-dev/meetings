@@ -4,7 +4,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import { getSupabase } from "@/lib/supabaseClient";
 
-const SEGMENT_COLOURS = ["#7a5cff", "#ff4f9a", "#43e5ff", "#ffc845"];
+const SEGMENT_COLOURS = ["#e8f3e4", "#cfead1", "#9fdca8", "#6fcb84"];
 const SPIN_MS = 4600;
 
 function polar(cx, cy, r, angleDeg) {
@@ -37,9 +37,9 @@ function Wheel({ people, rotation, spinning, onSpinEnd }) {
     <div className={`wheel-wrap ${spinning ? "spinning" : ""}`}>
       <div className="pointer" />
       <svg className="wheel-svg" viewBox="0 0 500 500" role="img" aria-label="Name wheel">
-        <circle cx={cx} cy={cy} r={248} fill="#0d0930" stroke="#372b85" strokeWidth="3" />
+        <circle cx={cx} cy={cy} r={248} fill="#ffffff" stroke="#dcebd8" strokeWidth="3" />
         {bulbs.map(([x, y], i) => (
-          <circle key={i} className="bulb" cx={x} cy={y} r={5} fill="#ffc845" />
+          <circle key={i} className="bulb" cx={x} cy={y} r={5} fill="#2fa84f" />
         ))}
         <g
           style={{
@@ -59,7 +59,7 @@ function Wheel({ people, rotation, spinning, onSpinEnd }) {
                 key={p.id}
                 d={segmentPath(cx, cy, r, i * seg, (i + 1) * seg)}
                 fill={SEGMENT_COLOURS[i % SEGMENT_COLOURS.length]}
-                stroke="#0d0930"
+                stroke="#ffffff"
                 strokeWidth="2.5"
               />
             ))
@@ -70,9 +70,9 @@ function Wheel({ people, rotation, spinning, onSpinEnd }) {
                 x={cx}
                 y={cy - r + 34}
                 textAnchor="middle"
-                fill="#1a1440"
+                fill="#16241c"
                 fontSize={fontSize}
-                fontWeight="800"
+                fontWeight="700"
                 style={{ fontFamily: "var(--font-body), sans-serif" }}
               >
                 {p.name.length > 14 ? p.name.slice(0, 13) + "…" : p.name}
@@ -80,12 +80,12 @@ function Wheel({ people, rotation, spinning, onSpinEnd }) {
             </g>
           ))}
         </g>
-        <circle cx={cx} cy={cy} r={34} fill="#0d0930" stroke="#ffc845" strokeWidth="4" />
+        <circle cx={cx} cy={cy} r={34} fill="#1b4332" stroke="#2fa84f" strokeWidth="4" />
         <text
           x={cx}
           y={cy + 7}
           textAnchor="middle"
-          fill="#ffc845"
+          fill="#ffffff"
           fontSize="18"
           style={{ fontFamily: "var(--font-display), sans-serif" }}
         >
@@ -106,7 +106,7 @@ function Sparks() {
         left: `${45 + Math.random() * 10}%`,
         top: `${40 + Math.random() * 10}%`,
         char: ["✦", "✸", "★"][i % 3],
-        color: ["#ff4f9a", "#43e5ff", "#ffc845"][i % 3],
+        color: ["#2fa84f", "#1b4332", "#8fd19e"][i % 3],
       })),
     []
   );

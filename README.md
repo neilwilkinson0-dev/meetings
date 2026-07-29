@@ -17,6 +17,12 @@ you can look back at what was asked and what came in.
 hit start, and a huge countdown fills the screen. Pause, resume, or set a new
 one whenever.
 
+**Ideas Board** — pitch feature ideas, vote them up or down, and discuss them
+in a comment thread. The board auto-ranks by net votes (👍 minus 👎). Any idea
+can be linked to a Jira ticket with a status (To do / In progress / Done) so
+the room can see it move from pitch to shipped — linking is manual (paste the
+ticket key/URL and set the status yourself), there's no live Jira sync.
+
 ## Stack
 
 Next.js 14 (App Router) · Supabase · Vercel — same shape as your other tools.
@@ -32,19 +38,25 @@ Next.js 14 (App Router) · Supabase · Vercel — same shape as your other tools
 - `/time-travel/play` — the big-screen stage (question, QR, countdown, reveal)
 - `/time-travel/submit` — the phone form guests scan the QR into
 - `/countdown` — set a title and minutes, then run the big-screen timer
+- `/ideas` — lobby
+- `/ideas/board` — pitch, vote, comment, and link ideas to Jira
 
 ## 1. Supabase setup
 
 Use a new Supabase project (or a new set of tables in an existing one). In the
-SQL editor, run `supabase/schema.sql` for Would You Rather and
-`supabase/time_travel_schema.sql` for Time Travel. Both use permissive anon
+SQL editor, run `supabase/schema.sql` for Would You Rather,
+`supabase/time_travel_schema.sql` for Time Travel, and
+`supabase/ideas_schema.sql` for the Ideas Board. All three use permissive anon
 policies (fine for a private tool).
 
 Would You Rather responses store the person's name and both option texts
 inline, so your saved history stays intact even if you later edit or delete a
 person or question. Time Travel entries are tied to a round (one row per
 question asked), so past ideas stay grouped under whichever question they
-answered.
+answered. The Ideas Board keeps three tables: `ideas` (title, description,
+author, optional Jira key/URL/status), `idea_votes` (one row per
+idea+browser, upsert on re-vote so each browser can only cast one vote per
+idea), and `idea_comments` (flat, timestamped).
 
 ## 2. Local dev
 
@@ -64,6 +76,6 @@ npm run dev
 
 ## Notes
 
-- Fonts (Bungee + Archivo) load from Google Fonts via a `<link>` in the layout.
+- Fonts (Quicksand + Poppins) load from Google Fonts via a `<link>` in the layout.
 - Adding a second game = a new folder under `app/` and a new card on the home
   page. The `soon` card is a placeholder for exactly that.
