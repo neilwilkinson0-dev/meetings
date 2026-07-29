@@ -13,6 +13,10 @@ a minute the room's answers reveal on screen — the QR stays up so late
 submissions keep landing. Every round and its ideas are saved to Supabase so
 you can look back at what was asked and what came in.
 
+**Countdown Timer** — give it a title and a time (any number of minutes),
+hit start, and a huge countdown fills the screen. Pause, resume, or set a new
+one whenever.
+
 ## Stack
 
 Next.js 14 (App Router) · Supabase · Vercel — same shape as your other tools.
@@ -27,6 +31,7 @@ Next.js 14 (App Router) · Supabase · Vercel — same shape as your other tools
 - `/time-travel/settings` — set the question, browse past rounds
 - `/time-travel/play` — the big-screen stage (question, QR, countdown, reveal)
 - `/time-travel/submit` — the phone form guests scan the QR into
+- `/countdown` — set a title and minutes, then run the big-screen timer
 
 ## 1. Supabase setup
 
