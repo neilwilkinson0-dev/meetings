@@ -1,47 +1,64 @@
 import Link from "next/link";
+import Logo from "./components/Logo";
+import { WheelDoodle, QrDoodle, SparkleDoodle, SquiggleDoodle } from "./components/Doodles";
 
 export default function Home() {
   return (
-    <main className="page">
-      <p className="eyebrow">Neil&apos;s meeting games</p>
-      <h1 className="page-title">Pick tonight&apos;s show</h1>
-      <p className="subtitle">
-        Choose a game to kick the meeting off. Each one has its own settings
-        and its own stage.
-      </p>
+    <main className="page hero">
+      <div className="hero-doodles">
+        <WheelDoodle className="hero-doodle-wheel" />
+        <QrDoodle className="hero-doodle-qr" />
+        <SparkleDoodle className="hero-doodle-sparkle" />
+        <SquiggleDoodle className="hero-doodle-squiggle" />
+      </div>
 
-      <div className="card-grid">
-        <Link href="/would-you-rather" className="game-card marquee">
-          <h2>Would You Rather</h2>
-          <p>
-            The wheel picks a person, the cards pick a question, and they have
-            to choose. No repeats — everyone gets a turn.
-          </p>
-          <span className="play-hint">Enter the stage →</span>
-        </Link>
+      <div className="hero-content">
+        <div className="hero-top">
+          <Logo />
+          <span className="wordmark">Neil&apos;s Meeting Games</span>
+        </div>
+        <p className="eyebrow">Kick the meeting off right</p>
+        <h1 className="page-title">
+          Pick tonight&apos;s <span className="accent">show.</span>
+        </h1>
+        <p className="subtitle">
+          Choose a game to kick the meeting off. Each one has its own settings
+          and its own stage.
+        </p>
 
-        <Link href="/time-travel" className="game-card marquee">
-          <h2>Time Travel</h2>
-          <p>
-            A question goes up, everyone scans a QR code and sends in an
-            idea from their phone. After a minute, the room&apos;s answers
-            reveal themselves.
-          </p>
-          <span className="play-hint">Enter the stage →</span>
-        </Link>
+        <div className="card-grid">
+          <Link href="/would-you-rather" className="game-card marquee">
+            <h2>Would You Rather</h2>
+            <p>
+              The wheel picks a person, the cards pick a question, and they
+              have to choose. No repeats — everyone gets a turn.
+            </p>
+            <span className="play-hint">Enter the stage →</span>
+          </Link>
 
-        <Link href="/countdown" className="game-card marquee">
-          <h2>Countdown Timer</h2>
-          <p>
-            Give it a title and a time, then hit start. A huge countdown
-            fills the screen so the whole room can see it.
-          </p>
-          <span className="play-hint">Enter the stage →</span>
-        </Link>
+          <Link href="/time-travel" className="game-card marquee">
+            <h2>Time Travel</h2>
+            <p>
+              A question goes up, everyone scans a QR code and sends in an
+              idea from their phone. After a minute, the room&apos;s answers
+              reveal themselves.
+            </p>
+            <span className="play-hint">Enter the stage →</span>
+          </Link>
 
-        <div className="game-card marquee soon">
-          <h2>Coming soon</h2>
-          <p>The next game goes here. The stage is being built.</p>
+          <Link href="/countdown" className="game-card marquee">
+            <h2>Countdown Timer</h2>
+            <p>
+              Give it a title and a time, then hit start. A huge countdown
+              fills the screen so the whole room can see it.
+            </p>
+            <span className="play-hint">Enter the stage →</span>
+          </Link>
+
+          <div className="game-card marquee soon">
+            <h2>Coming soon</h2>
+            <p>The next game goes here. The stage is being built.</p>
+          </div>
         </div>
       </div>
     </main>
