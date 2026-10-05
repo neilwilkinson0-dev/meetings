@@ -1787,27 +1787,46 @@ button {
 
 /* ---------- Presenter: setup, PIN, audience ---------- */
 
-.ev-setup-grid {
-  display: grid;
-  gap: 24px;
+.ev-present-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 28px;
   margin-top: 30px;
 }
 
-@media (min-width: 900px) {
-  .ev-setup-grid {
-    grid-template-columns: 1.5fr 1fr;
+.ev-present-info {
+  flex: 1;
+  min-width: 260px;
+}
+
+.ev-setup-qr {
+  flex: none;
+  width: 150px;
+  height: 150px;
+}
+
+.ev-setup-block {
+  margin-top: 24px;
+}
+
+.ev-ice-cols {
+  display: grid;
+  gap: 32px;
+}
+
+@media (min-width: 860px) {
+  .ev-ice-cols {
+    grid-template-columns: 1fr 1fr;
     align-items: start;
   }
 }
 
-.ev-setup-side {
-  display: grid;
-  gap: 24px;
-}
-
-.ev-setup-qr {
-  width: 160px;
-  margin-bottom: 16px;
+.ev-col-title {
+  font-family: var(--font-display), sans-serif;
+  font-size: 18px;
+  color: var(--forest);
+  margin-bottom: 12px;
 }
 
 .ev-sec-list {
@@ -1945,11 +1964,6 @@ button {
   max-width: 560px;
 }
 
-.ev-scroll-list {
-  max-height: 420px;
-  overflow-y: auto;
-}
-
 .ev-fun-pair {
   display: grid;
   gap: 2px;
@@ -1968,6 +1982,10 @@ button {
   color: inherit;
   padding: 4px 6px;
   margin: -4px -6px;
+  resize: none;
+  overflow: hidden;
+  line-height: 1.4;
+  display: block;
 }
 
 .ev-edit-field:hover {
