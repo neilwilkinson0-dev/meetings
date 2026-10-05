@@ -1413,21 +1413,21 @@ button {
   gap: 1vw;
   background: var(--white);
   border: 1px solid var(--border);
-  border-radius: 1.4vw;
-  padding: 0.8vw 1.4vw 0.8vw 0.8vw;
+  border-radius: 1.75vw;
+  padding: 1vw 1.75vw 1vw 1vw;
   box-shadow: var(--shadow-md);
   z-index: 10;
 }
 
 .ev-cornerqr img {
-  width: 8vw;
-  height: 8vw;
+  width: 10vw;
+  height: 10vw;
   image-rendering: pixelated;
 }
 
 .ev-cornerqr span {
   font-weight: 600;
-  font-size: 1.15vw;
+  font-size: 1.45vw;
   color: var(--forest);
   line-height: 1.35;
 }
@@ -1935,4 +1935,41 @@ button {
   color: var(--forest);
   font-weight: 600;
   max-width: 560px;
+}
+
+.ev-scroll-list {
+  max-height: 420px;
+  overflow-y: auto;
+}
+
+.ev-fun-pair {
+  display: grid;
+  gap: 2px;
+}
+
+.ev-fun-pair .or {
+  font-size: 12px;
+}
+
+.ev-edit-field {
+  width: 100%;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  background: transparent;
+  font: inherit;
+  color: inherit;
+  padding: 4px 6px;
+  margin: -4px -6px;
+}
+
+.ev-edit-field:hover {
+  border-color: var(--border);
+  background: var(--white);
+}
+
+.ev-edit-field:focus {
+  outline: none;
+  border-color: var(--green);
+  background: var(--white);
+  box-shadow: 0 0 0 3px var(--green-soft);
 }

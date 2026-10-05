@@ -19,6 +19,9 @@ const DEFAULTS = {
 function Setup() {
   const [sections, setSections] = useState([]);
   const [serious, setSerious] = useState([]);
+  const [fun, setFun] = useState([]);
+  const [newA, setNewA] = useState("");
+  const [newB, setNewB] = useState("");
   const [qCount, setQCount] = useState(0);
   const [open, setOpen] = useState(null);
   const [newKind, setNewKind] = useState("slides");
@@ -29,14 +32,16 @@ function Setup() {
   async function load() {
     const supabase = getSupabase();
     if (!supabase) return setError("Supabase isn't configured — add your keys to .env.local.");
-    const [s, q, c] = await Promise.all([
+    const [s, q, c, f] = await Promise.all([
       supabase.from("event_sections").select("*").order("position"),
       supabase.from("serious_questions").select("*").order("created_at"),
       supabase.from("event_questions").select("id", { count: "exact", head: true }),
+      supabase.from("fun_questions").select("*").order("created_at"),
     ]);
     if (s.error) return setError("Couldn't load sections. Run supabase/event_schema.sql first.");
     setSections(s.data ?? []);
     setSerious(q.data ?? []);
+    setFun(f.data ?? []);
     setQCount(c.count ?? 0);
   }
 
@@ -102,6 +107,36 @@ function Setup() {
   async function removeSerious(id) {
     setSerious((qs) => qs.filter((q) => q.id !== id));
     await getSupabase().from("serious_questions").delete().eq("id", id);
+  }
+
+  async function updateSerious(id, text) {
+    setSerious((qs) => qs.map((q) => (q.id === id ? { ...q, text } : q)));
+    await getSupabase().from("serious_questions").update({ text }).eq("id", id);
+  }
+
+  async function addFun(e) {
+    e.preventDefault();
+    const option_a = newA.trim();
+    const option_b = newB.trim();
+    if (!option_a || !option_b) return;
+    const { data } = await getSupabase()
+      .from("fun_questions")
+      .insert({ option_a, option_b })
+      .select()
+      .single();
+    if (data) setFun((qs) => [...qs, data]);
+    setNewA("");
+    setNewB("");
+  }
+
+  async function updateFun(id, patch) {
+    setFun((qs) => qs.map((q) => (q.id === id ? { ...q, ...patch } : q)));
+    await getSupabase().from("fun_questions").update(patch).eq("id", id);
+  }
+
+  async function removeFun(id) {
+    setFun((qs) => qs.filter((q) => q.id !== id));
+    await getSupabase().from("fun_questions").delete().eq("id", id);
   }
 
   async function clearQuestions() {
@@ -190,8 +225,49 @@ function Setup() {
           </section>
 
           <section className="panel">
-            <h2>Serious ice breakers</h2>
-            <p className="hint">The fun ones come from your Would You Rather questions.</p>
+            <h2>Fun ice breakers ({fun.length})</h2>
+            <p className="hint">
+              “Would you rather…” questions. A copy of your Would You Rather list — changes here
+              don&apos;t affect that game. Click any text to edit it.
+            </p>
+            <form className="add-col" onSubmit={addFun}>
+              <input
+                className="input"
+                placeholder="Would you rather…"
+                value={newA}
+                onChange={(e) => setNewA(e.target.value)}
+              />
+              <div className="add-row" style={{ marginBottom: 0 }}>
+                <input
+                  className="input"
+                  placeholder="…or"
+                  value={newB}
+                  onChange={(e) => setNewB(e.target.value)}
+                />
+                <button className="btn" type="submit">
+                  Add
+                </button>
+              </div>
+            </form>
+            <ul className="item-list ev-scroll-list">
+              {fun.map((q) => (
+                <li key={q.id} className="item-row">
+                  <span className="grow ev-fun-pair">
+                    <EditField value={q.option_a} onSave={(v) => updateFun(q.id, { option_a: v })} />
+                    <span className="or">or</span>
+                    <EditField value={q.option_b} onSave={(v) => updateFun(q.id, { option_b: v })} />
+                  </span>
+                  <button className="icon-btn danger" onClick={() => removeFun(q.id)} aria-label="Delete">
+                    ✕
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </section>
+
+          <section className="panel">
+            <h2>Serious ice breakers ({serious.length})</h2>
+            <p className="hint">Click any question to edit it.</p>
             <form className="add-row" onSubmit={addSerious}>
               <input
                 className="input"
@@ -206,7 +282,9 @@ function Setup() {
             <ul className="item-list">
               {serious.map((q) => (
                 <li key={q.id} className="item-row">
-                  <span className="grow">{q.text}</span>
+                  <span className="grow">
+                    <EditField value={q.text} onSave={(v) => updateSerious(q.id, v)} />
+                  </span>
                   <button className="icon-btn danger" onClick={() => removeSerious(q.id)} aria-label="Delete">
                     ✕
                   </button>
@@ -228,6 +306,26 @@ function Setup() {
         </div>
       </div>
     </main>
+  );
+}
+
+// Text that looks like plain text until clicked; saves on blur or Enter.
+function EditField({ value, onSave }) {
+  const [draft, setDraft] = useState(value);
+  useEffect(() => setDraft(value), [value]);
+  function commit() {
+    const v = draft.trim();
+    if (!v) return setDraft(value);
+    if (v !== value) onSave(v);
+  }
+  return (
+    <input
+      className="ev-edit-field"
+      value={draft}
+      onChange={(e) => setDraft(e.target.value)}
+      onBlur={commit}
+      onKeyDown={(e) => e.key === "Enter" && e.currentTarget.blur()}
+    />
   );
 }
 
@@ -428,7 +526,7 @@ function SectionEditor({ section, save }) {
       {section.kind === "icebreaker" && (
         <p className="ev-editor-label">
           On the day: ask someone “fun or serious?”, then tap the answer on your phone. Manage the
-          serious questions on the right.
+          fun and serious questions on the right.
         </p>
       )}
 
