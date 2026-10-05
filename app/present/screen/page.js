@@ -7,11 +7,10 @@ import { getSupabase } from "@/lib/supabaseClient";
 import { currentSection, useEvent, youTubeId } from "@/lib/event";
 
 function useQr(path) {
-  const [qr, setQr] = useState({ src: "", url: "" });
+  const [qr, setQr] = useState({ src: "" });
   useEffect(() => {
-    const url = `${window.location.origin}${path}`;
-    QRCode.toDataURL(url, { margin: 1, width: 600 }).then((src) =>
-      setQr({ src, url: url.replace(/^https?:\/\//, "") })
+    QRCode.toDataURL(`${window.location.origin}${path}`, { margin: 1, width: 600 }).then((src) =>
+      setQr({ src })
     );
   }, [path]);
   return qr;
@@ -24,8 +23,25 @@ function BigQr({ qr, label }) {
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img src={qr.src} alt="QR code" />
       <p className="ev-bigqr-label">{label}</p>
-      <p className="ev-bigqr-url">{qr.url}</p>
     </div>
+  );
+}
+
+// Heading, subheading and the optional "text underneath" lines.
+function Heading({ section }) {
+  const lines = (section.data?.body ?? "").split("\n").filter((l) => l.trim());
+  return (
+    <>
+      <h1 className="ev-h1">{section.title}</h1>
+      {section.subtitle && <p className="ev-sub">{section.subtitle}</p>}
+      {lines.length > 0 && (
+        <div className="ev-body">
+          {lines.map((l, i) => (
+            <p key={i}>{l}</p>
+          ))}
+        </div>
+      )}
+    </>
   );
 }
 
@@ -34,8 +50,7 @@ function TitleSection({ section, qr }) {
     <div className={`ev-title ${section.data?.show_big_qr ? "with-qr" : ""}`}>
       <div>
         <Logo size={72} />
-        <h1 className="ev-h1">{section.title}</h1>
-        {section.subtitle && <p className="ev-sub">{section.subtitle}</p>}
+        <Heading section={section} />
       </div>
       {section.data?.show_big_qr && <BigQr qr={qr} label="Scan to ask us anything" />}
     </div>
@@ -69,8 +84,9 @@ function SlidesSection({ section, step }) {
   if (!images.length) {
     return (
       <div className="ev-title">
-        <h1 className="ev-h1">{section.title}</h1>
-        <p className="ev-sub">No slides uploaded yet.</p>
+        <div>
+          <Heading section={section} />
+        </div>
       </div>
     );
   }
@@ -114,8 +130,9 @@ function VideoSection({ section, video }) {
   if (!url) {
     return (
       <div className="ev-title">
-        <h1 className="ev-h1">{section.title}</h1>
-        <p className="ev-sub">No video set yet.</p>
+        <div>
+          <Heading section={section} />
+        </div>
       </div>
     );
   }

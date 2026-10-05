@@ -334,6 +334,7 @@ function SectionEditor({ section, save }) {
   const [subtitle, setSubtitle] = useState(section.subtitle);
   const [bullets, setBullets] = useState((section.data?.bullets ?? []).join("\n"));
   const [videoUrl, setVideoUrl] = useState(section.data?.url ?? "");
+  const [body, setBody] = useState(section.data?.body ?? "");
   const [uploading, setUploading] = useState("");
   const data = section.data ?? {};
 
@@ -378,15 +379,33 @@ function SectionEditor({ section, save }) {
           onBlur={() => title !== section.title && save({ title })}
         />
       </label>
-      {section.kind !== "slides" && section.kind !== "video" && (
+      <label>
+        Subheading
+        <input
+          className="input"
+          value={subtitle}
+          onChange={(e) => setSubtitle(e.target.value)}
+          onBlur={() => subtitle !== section.subtitle && save({ subtitle })}
+        />
+      </label>
+
+      {(section.kind === "title" || section.kind === "slides" || section.kind === "video") && (
         <label>
-          Subheading
-          <input
+          Text underneath (a few lines)
+          <textarea
             className="input"
-            value={subtitle}
-            onChange={(e) => setSubtitle(e.target.value)}
-            onBlur={() => subtitle !== section.subtitle && save({ subtitle })}
+            rows={3}
+            value={body}
+            onChange={(e) => setBody(e.target.value)}
+            onBlur={() => body !== (data.body ?? "") && saveData({ body })}
           />
+          {section.kind !== "title" && (
+            <span className="ev-editor-label">
+              {section.kind === "slides"
+                ? "Shown with the heading when this section has no slide images."
+                : "Shown with the heading when no video is set."}
+            </span>
+          )}
         </label>
       )}
 
