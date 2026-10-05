@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import QRCode from "qrcode";
 import PinGate from "../PinGate";
@@ -159,77 +159,83 @@ function Setup() {
 
       {error && <div className="notice">{error}</div>}
 
-      <div className="ev-setup-grid">
-        <section className="panel">
-          <h2>Running order</h2>
-          <p className="hint">Tap a section to edit it. Use the arrows to reorder.</p>
-          <ol className="ev-sec-list">
-            {sections.map((s, i) => (
-              <li key={s.id} className={open === s.id ? "open" : ""}>
-                <div className="ev-sec-row">
-                  <span className="ev-r-num">{i + 1}</span>
-                  <button className="ev-sec-name" onClick={() => setOpen(open === s.id ? null : s.id)}>
-                    {s.title || "Untitled"}
-                    <small>{KINDS[s.kind] ?? s.kind}</small>
-                  </button>
-                  <button className="icon-btn" onClick={() => move(i, -1)} disabled={i === 0} aria-label="Move up">
-                    ↑
-                  </button>
-                  <button
-                    className="icon-btn"
-                    onClick={() => move(i, 1)}
-                    disabled={i === sections.length - 1}
-                    aria-label="Move down"
-                  >
-                    ↓
-                  </button>
-                  <button className="icon-btn danger" onClick={() => remove(s)} aria-label="Delete">
-                    ✕
-                  </button>
-                </div>
-                {open === s.id && <SectionEditor section={s} save={(patch) => save(s.id, patch)} />}
-              </li>
-            ))}
-          </ol>
-          <div className="add-row" style={{ marginTop: 18, marginBottom: 0 }}>
-            <select className="input" value={newKind} onChange={(e) => setNewKind(e.target.value)}>
-              {Object.entries(KINDS).map(([k, label]) => (
-                <option key={k} value={k}>
-                  {label}
-                </option>
-              ))}
-            </select>
-            <button className="btn" onClick={add}>
-              Add
+      <section className="panel ev-present-bar">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        {remoteQr && <img className="ev-setup-qr" src={remoteQr} alt="Remote QR code" />}
+        <div className="ev-present-info">
+          <h2>Present</h2>
+          <p className="hint">
+            Open the screen on the laptop plugged into the projector, then scan this code with
+            your phone for the remote.
+          </p>
+          <div className="btn-row">
+            <Link className="btn" href="/present/screen" target="_blank">
+              Open screen
+            </Link>
+            <Link className="btn secondary" href="/present/remote">
+              Remote
+            </Link>
+            <button className="btn secondary" onClick={clearQuestions}>
+              Clear {qCount} question{qCount === 1 ? "" : "s"} &amp; reset
             </button>
           </div>
-        </section>
+        </div>
+      </section>
 
-        <div className="ev-setup-side">
-          <section className="panel">
-            <h2>Present</h2>
-            <p className="hint">
-              Open the screen on the laptop plugged into the projector. Scan this with your phone
-              for the remote.
-            </p>
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            {remoteQr && <img className="ev-setup-qr" src={remoteQr} alt="Remote QR code" />}
-            <div className="btn-row">
-              <Link className="btn" href="/present/screen" target="_blank">
-                Open screen
-              </Link>
-              <Link className="btn secondary" href="/present/remote">
-                Remote
-              </Link>
-            </div>
-          </section>
+      <section className="panel ev-setup-block">
+        <h2>Running order</h2>
+        <p className="hint">Tap a section to edit it. Use the arrows to reorder.</p>
+        <ol className="ev-sec-list">
+          {sections.map((s, i) => (
+            <li key={s.id} className={open === s.id ? "open" : ""}>
+              <div className="ev-sec-row">
+                <span className="ev-r-num">{i + 1}</span>
+                <button className="ev-sec-name" onClick={() => setOpen(open === s.id ? null : s.id)}>
+                  {s.title || "Untitled"}
+                  <small>{KINDS[s.kind] ?? s.kind}</small>
+                </button>
+                <button className="icon-btn" onClick={() => move(i, -1)} disabled={i === 0} aria-label="Move up">
+                  ↑
+                </button>
+                <button
+                  className="icon-btn"
+                  onClick={() => move(i, 1)}
+                  disabled={i === sections.length - 1}
+                  aria-label="Move down"
+                >
+                  ↓
+                </button>
+                <button className="icon-btn danger" onClick={() => remove(s)} aria-label="Delete">
+                  ✕
+                </button>
+              </div>
+              {open === s.id && <SectionEditor section={s} save={(patch) => save(s.id, patch)} />}
+            </li>
+          ))}
+        </ol>
+        <div className="add-row" style={{ marginTop: 18, marginBottom: 0 }}>
+          <select className="input" value={newKind} onChange={(e) => setNewKind(e.target.value)}>
+            {Object.entries(KINDS).map(([k, label]) => (
+              <option key={k} value={k}>
+                {label}
+              </option>
+            ))}
+          </select>
+          <button className="btn" onClick={add}>
+            Add
+          </button>
+        </div>
+      </section>
 
-          <section className="panel">
-            <h2>Fun ice breakers ({fun.length})</h2>
-            <p className="hint">
-              “Would you rather…” questions. A copy of your Would You Rather list — changes here
-              don&apos;t affect that game. Click any text to edit it.
-            </p>
+      <section className="panel ev-setup-block">
+        <h2>Ice breakers</h2>
+        <p className="hint">
+          Click any question to edit it. The fun list is a copy of your Would You Rather
+          questions — changes here don&apos;t affect that game.
+        </p>
+        <div className="ev-ice-cols">
+          <div>
+            <h3 className="ev-col-title">🎉 Fun ({fun.length})</h3>
             <form className="add-col" onSubmit={addFun}>
               <input
                 className="input"
@@ -249,7 +255,7 @@ function Setup() {
                 </button>
               </div>
             </form>
-            <ul className="item-list ev-scroll-list">
+            <ul className="item-list">
               {fun.map((q) => (
                 <li key={q.id} className="item-row">
                   <span className="grow ev-fun-pair">
@@ -263,11 +269,9 @@ function Setup() {
                 </li>
               ))}
             </ul>
-          </section>
-
-          <section className="panel">
-            <h2>Serious ice breakers ({serious.length})</h2>
-            <p className="hint">Click any question to edit it.</p>
+          </div>
+          <div>
+            <h3 className="ev-col-title">🤔 Serious ({serious.length})</h3>
             <form className="add-row" onSubmit={addSerious}>
               <input
                 className="input"
@@ -291,40 +295,44 @@ function Setup() {
                 </li>
               ))}
             </ul>
-          </section>
-
-          <section className="panel">
-            <h2>Before you go on</h2>
-            <p className="hint">
-              {qCount} audience question{qCount === 1 ? "" : "s"} saved. Clear test questions and
-              reset the screen to the first section.
-            </p>
-            <button className="btn secondary" onClick={clearQuestions}>
-              Clear questions &amp; reset
-            </button>
-          </section>
+          </div>
         </div>
-      </div>
+      </section>
     </main>
   );
 }
 
 // Text that looks like plain text until clicked; saves on blur or Enter.
+// A textarea that grows with its content so long questions wrap.
 function EditField({ value, onSave }) {
   const [draft, setDraft] = useState(value);
+  const ref = useRef(null);
   useEffect(() => setDraft(value), [value]);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    el.style.height = "auto";
+    el.style.height = `${el.scrollHeight}px`;
+  }, [draft]);
   function commit() {
     const v = draft.trim();
     if (!v) return setDraft(value);
     if (v !== value) onSave(v);
   }
   return (
-    <input
+    <textarea
+      ref={ref}
+      rows={1}
       className="ev-edit-field"
       value={draft}
-      onChange={(e) => setDraft(e.target.value)}
+      onChange={(e) => setDraft(e.target.value.replace(/\n/g, " "))}
       onBlur={commit}
-      onKeyDown={(e) => e.key === "Enter" && e.currentTarget.blur()}
+      onKeyDown={(e) => {
+        if (e.key === "Enter") {
+          e.preventDefault();
+          e.currentTarget.blur();
+        }
+      }}
     />
   );
 }
