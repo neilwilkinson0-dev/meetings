@@ -66,7 +66,7 @@ export default function Home() {
           </Link>
 
           <Link href="/present" className="game-card marquee">
-            <h2>Presenter</h2>
+            <h2>EATP 2026</h2>
             <p>
               Replace the PowerPoint: slides, video, an ice breaker and live
               audience Q&amp;A on the big screen, all driven from your phone.

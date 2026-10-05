@@ -12,7 +12,7 @@ export default function PinGate({ children }) {
 
   return (
     <main className="page ev-pin">
-      <p className="eyebrow">Presenter</p>
+      <p className="eyebrow">EATP 2026</p>
       <h1 className="page-title">Enter PIN</h1>
       <form
         className="ev-pin-form"

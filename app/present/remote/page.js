@@ -11,6 +11,7 @@ import {
   navigate,
   pickIcebreaker,
   stepCount,
+  toRoman,
   useEvent,
 } from "@/lib/event";
 
@@ -90,7 +91,7 @@ function Remote() {
       <header className="ev-r-head">
         <div className="ev-r-now">
           <span className="ev-r-pos">
-            {idx + 1}/{sections.length}
+            {toRoman(idx + 1)} of {toRoman(sections.length)}
             {steps > 1 && ` · slide ${step + 1}/${steps}`}
           </span>
           <strong>{section?.title || "—"}</strong>
@@ -229,7 +230,7 @@ function Remote() {
                     setTab("live");
                   }}
                 >
-                  <span className="ev-r-num">{i + 1}</span>
+                  <span className="ev-r-num">{toRoman(i + 1)}</span>
                   <span className="ev-r-grow">
                     {s.title || "Untitled"}
                     <small>{KINDS[s.kind] ?? s.kind}</small>

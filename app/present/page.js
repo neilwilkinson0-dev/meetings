@@ -6,7 +6,7 @@ export default function Present() {
       <p className="eyebrow">
         <Link href="/">← All games</Link>
       </p>
-      <h1 className="page-title">Presenter</h1>
+      <h1 className="page-title">EATP 2026</h1>
       <p className="subtitle">
         Run a whole session from your phone: title screens, slides, a video,
         a fun-or-serious ice breaker and audience Q&amp;A — with a QR code in

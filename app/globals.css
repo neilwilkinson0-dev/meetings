@@ -1999,3 +1999,335 @@ button {
   background: var(--white);
   box-shadow: 0 0 0 3px var(--green-soft);
 }
+
+/* ---------- Rome theme (presenter + audience pages) ----------
+   Colours from the E-ATP 2026 deck: magenta #A2268C, navy #25224C,
+   with a sunset gold from the Colosseum photo as a small accent. */
+
+.rome {
+  --font-display: "Cinzel";
+  --font-body: "Montserrat";
+
+  --forest: #25224c;
+  --forest-deep: #17153a;
+  --green: #a2268c;
+  --green-soft: #f3dff0;
+  --mint: #f1ebe2;
+  --mint-soft: #f8f4ee;
+  --page-bg: #faf7f2;
+  --border: #e7ddd0;
+  --ink: #1f1d3d;
+  --ink-dim: #635e78;
+  --gold: #e9a93b;
+  --shadow-sm: 0 6px 16px rgba(37, 34, 76, 0.1);
+  --shadow-md: 0 14px 34px rgba(37, 34, 76, 0.16);
+
+  min-height: 100vh;
+  background:
+    radial-gradient(900px 500px at 10% -10%, #f3e8e0 0%, transparent 60%),
+    var(--page-bg);
+  font-family: var(--font-body), system-ui, sans-serif;
+  color: var(--ink);
+}
+
+.rome .page-title,
+.rome .panel h2,
+.rome .game-card h2 {
+  font-family: var(--font-display), serif;
+  letter-spacing: 0.02em;
+}
+
+.rome .laurel {
+  color: var(--gold);
+}
+
+/* Deck-style torn paper edges. The edge takes --torn-color so it matches
+   whatever card it sits on. Cards that aren't already positioned get
+   position: relative from their own rules. */
+.rome .torn {
+  --torn-color: var(--white);
+  border-radius: 3px;
+}
+
+.rome .torn::before,
+.rome .torn::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 14px;
+  background: var(--torn-color);
+  -webkit-mask: url(/media/rome/torn-edge.svg) center / 100% 100% no-repeat;
+  mask: url(/media/rome/torn-edge.svg) center / 100% 100% no-repeat;
+  pointer-events: none;
+}
+
+.rome .torn::before {
+  top: -12px;
+}
+
+.rome .torn::after {
+  bottom: -12px;
+  transform: scaleY(-1);
+}
+
+.rome .ev-bigqr,
+.rome .ev-ice-card,
+.rome .ev-ice-opt {
+  position: relative;
+}
+
+/* Big screen */
+
+.rome .ev-screen {
+  background:
+    linear-gradient(180deg, rgba(23, 21, 58, 0.5) 0%, rgba(23, 21, 58, 0.78) 100%),
+    url(/media/rome/colosseum.webp) center / cover no-repeat,
+    var(--forest-deep);
+  color: var(--white);
+}
+
+.rome .ev-h1 {
+  color: var(--white);
+  letter-spacing: 0.03em;
+  text-shadow: 0 4px 28px rgba(0, 0, 0, 0.45);
+}
+
+.rome .ev-sub,
+.rome .ev-start-hint {
+  color: rgba(255, 255, 255, 0.86);
+}
+
+.rome .ev-body p,
+.rome .ev-bullets li {
+  color: var(--white);
+  text-shadow: 0 2px 14px rgba(0, 0, 0, 0.4);
+}
+
+.rome .ev-bullets li::before {
+  background: var(--gold);
+}
+
+.rome .ev-slides {
+  background: #000;
+}
+
+.rome .ev-title .laurel {
+  width: clamp(56px, 6vw, 120px);
+  height: auto;
+}
+
+.rome .ev-ice-choices {
+  margin-top: 4vh;
+}
+
+/* Sit the ice breaker a little above centre so it clears the corner QR. */
+.rome .ev-ice {
+  padding-bottom: 12vh;
+}
+
+.rome .ev-ice-card {
+  padding: 2.6vh 2vw;
+  font-size: 3.6vw;
+  background: var(--white);
+  border: none;
+  color: var(--forest);
+  font-family: var(--font-display), serif;
+}
+
+.rome .ev-ice-emoji {
+  font-size: 4vw;
+}
+
+.rome .ev-ice-card.serious {
+  --torn-color: var(--green);
+  background: var(--green);
+  color: var(--white);
+}
+
+.rome .ev-ice-or {
+  color: var(--gold);
+  font-family: var(--font-display), serif;
+  text-transform: none;
+  font-style: italic;
+}
+
+.rome .ev-ice-tag {
+  background: var(--gold);
+  color: var(--forest);
+}
+
+.rome .ev-ice-tag.serious {
+  background: var(--green);
+  color: var(--white);
+}
+
+.rome .ev-ice-cycling {
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.rome .ev-ice-q,
+.rome .ev-qa-q {
+  color: var(--white);
+  letter-spacing: 0.02em;
+  text-shadow: 0 4px 28px rgba(0, 0, 0, 0.45);
+}
+
+.rome .ev-ice-lead {
+  color: rgba(255, 255, 255, 0.86);
+  font-family: var(--font-display), serif;
+}
+
+.rome .ev-ice-opt {
+  background: var(--white);
+  border: none;
+  border-radius: 3px;
+  color: var(--forest);
+  font-family: var(--font-body), sans-serif;
+  font-weight: 700;
+}
+
+.rome .ev-qa-name {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.rome .ev-qa-count {
+  color: var(--gold);
+}
+
+.rome .ev-bigqr {
+  border: none;
+  border-radius: 3px;
+}
+
+.rome .ev-bigqr-label {
+  font-family: var(--font-display), serif;
+  color: var(--forest);
+}
+
+.rome .ev-cornerqr {
+  border: none;
+  border-radius: 3px;
+}
+
+.rome .ev-cornerqr span {
+  color: var(--forest);
+}
+
+/* Phone remote */
+
+.rome .ev-r-head {
+  background: var(--forest);
+  border-bottom: none;
+}
+
+.rome .ev-r-now strong {
+  color: var(--white);
+  font-family: var(--font-display), serif;
+}
+
+.rome .ev-r-pos {
+  color: var(--gold);
+  font-family: var(--font-display), serif;
+}
+
+.rome .ev-r-tabs button {
+  color: rgba(255, 255, 255, 0.65);
+}
+
+.rome .ev-r-tabs button.on {
+  color: var(--white);
+  border-bottom-color: var(--gold);
+}
+
+.rome .ev-r-badge {
+  background: var(--gold);
+  color: var(--forest);
+}
+
+.rome .ev-r-num {
+  width: auto;
+  min-width: 34px;
+  padding: 0 7px;
+  border-radius: 999px;
+  font-family: var(--font-display), serif;
+  font-size: 13px;
+}
+
+.rome .ev-r-big.fun {
+  background: var(--gold);
+  border-color: var(--gold);
+  color: var(--forest);
+}
+
+.rome .ev-r-big.serious {
+  background: var(--green);
+  border-color: var(--green);
+}
+
+.rome .ev-r-next {
+  background: var(--green);
+}
+
+.rome .ev-r-qmeta button.primary {
+  background: var(--green);
+  border-color: var(--green);
+}
+
+/* Audience question page */
+
+.rome .ev-ask {
+  min-height: 100vh;
+  background: var(--white);
+}
+
+.ev-ask-hero {
+  position: relative;
+  text-align: center;
+  color: var(--white);
+  padding: 40px 20px 70px;
+  background:
+    linear-gradient(180deg, rgba(23, 21, 58, 0.35) 0%, rgba(23, 21, 58, 0.75) 100%),
+    url(/media/rome/colosseum-small.webp) center 35% / cover no-repeat,
+    #25224c;
+}
+
+.ev-ask-hero::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -1px;
+  height: 22px;
+  background: url(/media/rome/torn-edge.svg) center bottom / 100% 100% no-repeat;
+}
+
+.ev-ask-kicker {
+  margin-top: 10px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+
+.ev-ask-title {
+  font-family: var(--font-display), serif;
+  font-weight: 700;
+  font-size: clamp(30px, 9vw, 46px);
+  letter-spacing: 0.03em;
+  margin-top: 6px;
+  text-shadow: 0 3px 18px rgba(0, 0, 0, 0.45);
+}
+
+.ev-ask-body {
+  max-width: 560px;
+  margin: 0 auto;
+  padding: 10px 20px 60px;
+}
+
+.ev-ask-lead {
+  color: var(--ink-dim);
+  font-size: 16px;
+  line-height: 1.5;
+}
