@@ -35,7 +35,7 @@ create table if not exists event_questions (
   created_at timestamptz not null default now()
 );
 
--- The "serious" side of the ice breaker. The fun side reuses wyr_questions.
+-- The "serious" side of the ice breaker.
 create table if not exists serious_questions (
   id uuid primary key default gen_random_uuid(),
   text text not null,
@@ -98,3 +98,18 @@ select * from (values
   ('If remote proctoring disappeared tomorrow, what would you do instead?')
 ) as v(text)
 where not exists (select 1 from serious_questions);
+
+-- The "fun" side of the ice breaker: a copy of the Would You Rather
+-- questions, so editing one list doesn't touch the other game.
+create table if not exists fun_questions (
+  id uuid primary key default gen_random_uuid(),
+  option_a text not null,
+  option_b text not null,
+  created_at timestamptz not null default now()
+);
+alter table fun_questions enable row level security;
+create policy "anon full access fun_questions" on fun_questions
+  for all using (true) with check (true);
+insert into fun_questions (option_a, option_b, created_at)
+select option_a, option_b, created_at from wyr_questions
+where not exists (select 1 from fun_questions);

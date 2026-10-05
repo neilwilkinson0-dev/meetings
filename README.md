@@ -28,8 +28,9 @@ order of sections (title screens, heading + bullets, slide images, a video,
 a fun-or-serious ice breaker, audience Q&A), put `/present/screen` on the
 projector, and drive it from `/present/remote` on your phone. A QR code sits
 in the corner of every section so the room can send questions any time;
-nothing reaches the screen until you tap Show. The ice breaker's fun side
-reuses the Would You Rather questions; the serious side has its own list.
+nothing reaches the screen until you tap Show. The ice breaker has its own
+fun list (seeded from the Would You Rather questions, edited separately) and
+serious list.
 
 ## Stack
 

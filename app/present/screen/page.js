@@ -253,7 +253,7 @@ export default function Screen() {
     const supabase = getSupabase();
     if (!supabase) return;
     Promise.all([
-      supabase.from("wyr_questions").select("option_a, option_b"),
+      supabase.from("fun_questions").select("option_a, option_b"),
       supabase.from("serious_questions").select("text"),
     ]).then(([f, s]) =>
       setPools({
