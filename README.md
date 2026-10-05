@@ -23,7 +23,7 @@ can be linked to a Jira ticket with a status (To do / In progress / Done) so
 the room can see it move from pitch to shipped — linking is manual (paste the
 ticket key/URL and set the status yourself), there's no live Jira sync.
 
-**Presenter** — replaces the PowerPoint for a live session. Build a running
+**EATP 2026 (Presenter)** — replaces the PowerPoint for a live session. Build a running
 order of sections (title screens, heading + bullets, slide images, a video,
 a fun-or-serious ice breaker, audience Q&A), put `/present/screen` on the
 projector, and drive it from `/present/remote` on your phone. A QR code sits

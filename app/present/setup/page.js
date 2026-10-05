@@ -5,7 +5,7 @@ import Link from "next/link";
 import QRCode from "qrcode";
 import PinGate from "../PinGate";
 import { getSupabase } from "@/lib/supabaseClient";
-import { KINDS, uploadMedia, youTubeId } from "@/lib/event";
+import { KINDS, toRoman, uploadMedia, youTubeId } from "@/lib/event";
 
 const DEFAULTS = {
   title: { title: "New title screen", data: { show_big_qr: false } },
@@ -150,7 +150,7 @@ function Setup() {
   return (
     <main className="page ev-setup">
       <p className="eyebrow">
-        <Link href="/present">← Presenter</Link>
+        <Link href="/present">← EATP 2026</Link>
       </p>
       <h1 className="page-title">Set up the session</h1>
       <p className="subtitle">
@@ -189,7 +189,7 @@ function Setup() {
           {sections.map((s, i) => (
             <li key={s.id} className={open === s.id ? "open" : ""}>
               <div className="ev-sec-row">
-                <span className="ev-r-num">{i + 1}</span>
+                <span className="ev-r-num">{toRoman(i + 1)}</span>
                 <button className="ev-sec-name" onClick={() => setOpen(open === s.id ? null : s.id)}>
                   {s.title || "Untitled"}
                   <small>{KINDS[s.kind] ?? s.kind}</small>

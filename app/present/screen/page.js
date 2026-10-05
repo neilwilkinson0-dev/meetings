@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import QRCode from "qrcode";
-import Logo from "../../components/Logo";
+import Laurel from "../../components/Laurel";
 import { getSupabase } from "@/lib/supabaseClient";
 import { currentSection, useEvent, youTubeId } from "@/lib/event";
 
@@ -19,7 +19,7 @@ function useQr(path) {
 function BigQr({ qr, label }) {
   if (!qr.src) return null;
   return (
-    <div className="ev-bigqr">
+    <div className="ev-bigqr torn">
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img src={qr.src} alt="QR code" />
       <p className="ev-bigqr-label">{label}</p>
@@ -49,7 +49,7 @@ function TitleSection({ section, qr }) {
   return (
     <div className={`ev-title ${section.data?.show_big_qr ? "with-qr" : ""}`}>
       <div>
-        <Logo size={72} />
+        <Laurel size={88} />
         <Heading section={section} />
       </div>
       {section.data?.show_big_qr && <BigQr qr={qr} label="Scan to ask us anything" />}
@@ -200,11 +200,11 @@ function IcebreakerSection({ section, ice, pools }) {
         <h1 className="ev-h1">{section.title}</h1>
         <p className="ev-sub">{section.subtitle || "Fun or serious?"}</p>
         <div className="ev-ice-choices">
-          <div className="ev-ice-card fun">
+          <div className="ev-ice-card fun torn">
             <span className="ev-ice-emoji">🎉</span>Fun
           </div>
           <div className="ev-ice-or">or</div>
-          <div className="ev-ice-card serious">
+          <div className="ev-ice-card serious torn">
             <span className="ev-ice-emoji">🤔</span>Serious
           </div>
         </div>
@@ -223,9 +223,9 @@ function IcebreakerSection({ section, ice, pools }) {
         <div className="ev-ice-wyr pop">
           <p className="ev-ice-lead">Would you rather…</p>
           <div className="ev-ice-options">
-            <div className="ev-ice-opt">{ice.a}</div>
+            <div className="ev-ice-opt torn">{ice.a}</div>
             <div className="ev-ice-or">or</div>
-            <div className="ev-ice-opt">{ice.b}</div>
+            <div className="ev-ice-opt torn">{ice.b}</div>
           </div>
         </div>
       )}
@@ -304,7 +304,7 @@ export default function Screen() {
   if (!started) {
     return (
       <main className="ev-screen ev-start" onClick={start}>
-        <Logo size={72} />
+        <Laurel size={88} />
         <h1 className="ev-h1">Ready to present</h1>
         <p className="ev-sub">
           {loaded ? "Click anywhere to go full screen and start." : "Loading…"}
@@ -344,7 +344,7 @@ export default function Screen() {
       </div>
 
       {showCornerQr && qr.src && (
-        <div className="ev-cornerqr">
+        <div className="ev-cornerqr torn">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src={qr.src} alt="QR code to ask a question" />
           <span>
