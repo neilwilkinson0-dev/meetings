@@ -1179,9 +1179,16 @@ button {
   margin-top: 1.4vh;
 }
 
-.ev-bigqr-url {
-  color: var(--ink-dim);
-  font-size: 1.3vw;
+.ev-body {
+  margin-top: 3vh;
+  display: grid;
+  gap: 1.2vh;
+}
+
+.ev-body p {
+  font-size: clamp(18px, 2.1vw, 46px);
+  line-height: 1.4;
+  color: var(--ink);
 }
 
 .ev-text {
@@ -1861,6 +1868,7 @@ button {
 }
 
 .ev-editor-label {
+  font-weight: 400;
   font-size: 14px;
   color: var(--ink-dim);
   margin-bottom: 8px;
