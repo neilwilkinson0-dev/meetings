@@ -302,7 +302,8 @@ export default function Screen() {
   const bigQrShowing =
     (section?.kind === "title" && section.data?.show_big_qr) ||
     (section?.kind === "qa" && !question);
-  const showCornerQr = !data.hide_qr && !bigQrShowing && section?.kind !== "video";
+  const showCornerQr =
+    !data.hide_qr && !section?.data?.hide_qr && !bigQrShowing && section?.kind !== "video";
 
   return (
     <main className="ev-screen" onDoubleClick={start}>

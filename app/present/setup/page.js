@@ -292,6 +292,17 @@ function SectionEditor({ section, save }) {
         </label>
       )}
 
+      {section.kind !== "video" && (
+        <label className="ev-check">
+          <input
+            type="checkbox"
+            checked={!!data.hide_qr}
+            onChange={(e) => saveData({ hide_qr: e.target.checked })}
+          />
+          Hide the corner QR code on this section (if it covers something)
+        </label>
+      )}
+
       {section.kind === "title" && (
         <label className="ev-check">
           <input
