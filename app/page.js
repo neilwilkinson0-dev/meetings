@@ -65,6 +65,15 @@ export default function Home() {
             <span className="play-hint">Enter the stage →</span>
           </Link>
 
+          <Link href="/present" className="game-card marquee">
+            <h2>Presenter</h2>
+            <p>
+              Replace the PowerPoint: slides, video, an ice breaker and live
+              audience Q&amp;A on the big screen, all driven from your phone.
+            </p>
+            <span className="play-hint">Enter the stage →</span>
+          </Link>
+
           <div className="game-card marquee soon">
             <h2>Coming soon</h2>
             <p>The next game goes here. The stage is being built.</p>
