@@ -4,7 +4,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import QRCode from "qrcode";
 import Laurel from "../../components/Laurel";
 import { getSupabase } from "@/lib/supabaseClient";
-import { currentSection, funText, useEvent, youTubeId } from "@/lib/event";
+import { currentSection, funText, useEvent, useWakeLock, youTubeId } from "@/lib/event";
 
 function useQr(path) {
   const [qr, setQr] = useState({ src: "" });
@@ -310,6 +310,7 @@ export default function Screen() {
   const [pools, setPools] = useState({ fun: [], serious: [] });
   const qr = useQr("/ask");
   const { isFull, mouseActive } = useFullscreenControls(started);
+  useWakeLock(started);
 
   // Text for the ice breaker's slot-machine shuffle.
   useEffect(() => {

@@ -13,26 +13,8 @@ import {
   stepCount,
   toRoman,
   useEvent,
+  useWakeLock,
 } from "@/lib/event";
-
-// Keep the phone from sleeping mid-talk.
-function useWakeLock() {
-  useEffect(() => {
-    let lock = null;
-    async function acquire() {
-      try {
-        lock = await navigator.wakeLock?.request("screen");
-      } catch {}
-    }
-    acquire();
-    const onVisible = () => document.visibilityState === "visible" && acquire();
-    document.addEventListener("visibilitychange", onVisible);
-    return () => {
-      document.removeEventListener("visibilitychange", onVisible);
-      lock?.release?.().catch(() => {});
-    };
-  }, []);
-}
 
 function Remote() {
   const { sections, state, questions, error, loaded, updateState, setQuestions } = useEvent({
