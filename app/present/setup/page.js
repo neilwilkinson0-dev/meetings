@@ -5,7 +5,7 @@ import Link from "next/link";
 import QRCode from "qrcode";
 import PinGate from "../PinGate";
 import { getSupabase } from "@/lib/supabaseClient";
-import { AUDIENCE, KINDS, toRoman, uploadMedia, youTubeId } from "@/lib/event";
+import { AUDIENCE, KINDS, toRoman, uploadMedia, usePinGate, youTubeId } from "@/lib/event";
 
 const DEFAULTS = {
   title: { title: "New title screen", data: { show_big_qr: false } },
@@ -27,6 +27,7 @@ function Setup() {
   const [newSerious, setNewSerious] = useState("");
   const [error, setError] = useState("");
   const [remoteQr, setRemoteQr] = useState("");
+  const pinGate = usePinGate();
 
   async function load() {
     const supabase = getSupabase();
@@ -193,6 +194,11 @@ function Setup() {
             <button className="btn secondary" onClick={clearQuestions}>
               Clear {qCount} question{qCount === 1 ? "" : "s"} &amp; reset
             </button>
+            {pinGate.enabled && (
+              <button className="btn secondary" onClick={pinGate.lock}>
+                🔒 Lock this device
+              </button>
+            )}
           </div>
         </div>
       </section>

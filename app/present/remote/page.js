@@ -13,6 +13,7 @@ import {
   stepCount,
   toRoman,
   useEvent,
+  usePinGate,
   useWakeLock,
 } from "@/lib/event";
 
@@ -21,6 +22,7 @@ function Remote() {
     withQuestions: true,
   });
   const [tab, setTab] = useState("live");
+  const pinGate = usePinGate();
   const [busy, setBusy] = useState(false);
   useWakeLock();
 
@@ -83,6 +85,11 @@ function Remote() {
             {steps > 1 && ` · slide ${step + 1}/${steps}`}
           </span>
           <strong>{section?.title || "—"}</strong>
+          {pinGate.enabled && (
+            <button className="ev-r-lock" onClick={pinGate.lock}>
+              🔒 Lock
+            </button>
+          )}
         </div>
         <nav className="ev-r-tabs">
           <button className={tab === "live" ? "on" : ""} onClick={() => setTab("live")}>
