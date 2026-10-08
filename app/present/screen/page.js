@@ -4,7 +4,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import QRCode from "qrcode";
 import Laurel from "../../components/Laurel";
 import { getSupabase } from "@/lib/supabaseClient";
-import { currentSection, funText, useEvent, youTubeId } from "@/lib/event";
+import { currentSection, funText, useEvent, useWakeLock, youTubeId } from "@/lib/event";
 
 function useQr(path) {
   const [qr, setQr] = useState({ src: "" });
@@ -261,11 +261,56 @@ function QaSection({ section, question, count, qr }) {
   );
 }
 
+function enterFullscreen() {
+  document.documentElement.requestFullscreen?.().catch(() => {});
+}
+
+// Getting back to full screen mid-talk: press F, double-click, or use the
+// button that appears when the mouse moves. (Browsers only allow full
+// screen from a click or key press on this device, not from the phone.)
+function useFullscreenControls(active) {
+  const [isFull, setIsFull] = useState(false);
+  const [mouseActive, setMouseActive] = useState(false);
+
+  useEffect(() => {
+    const sync = () => setIsFull(!!document.fullscreenElement);
+    sync();
+    document.addEventListener("fullscreenchange", sync);
+    return () => document.removeEventListener("fullscreenchange", sync);
+  }, []);
+
+  useEffect(() => {
+    if (!active) return;
+    let timer;
+    const onMove = () => {
+      setMouseActive(true);
+      clearTimeout(timer);
+      timer = setTimeout(() => setMouseActive(false), 3000);
+    };
+    const onKey = (e) => {
+      if (e.key !== "f" && e.key !== "F") return;
+      if (document.fullscreenElement) document.exitFullscreen?.().catch(() => {});
+      else enterFullscreen();
+    };
+    window.addEventListener("mousemove", onMove);
+    window.addEventListener("keydown", onKey);
+    return () => {
+      clearTimeout(timer);
+      window.removeEventListener("mousemove", onMove);
+      window.removeEventListener("keydown", onKey);
+    };
+  }, [active]);
+
+  return { isFull, mouseActive };
+}
+
 export default function Screen() {
   const { sections, state, questions, error, loaded } = useEvent({ withQuestions: true });
   const [started, setStarted] = useState(false);
   const [pools, setPools] = useState({ fun: [], serious: [] });
   const qr = useQr("/ask");
+  const { isFull, mouseActive } = useFullscreenControls(started);
+  useWakeLock(started);
 
   // Text for the ice breaker's slot-machine shuffle.
   useEffect(() => {
@@ -291,7 +336,7 @@ export default function Screen() {
 
   function start() {
     // This click is also what lets the video play with sound later.
-    document.documentElement.requestFullscreen?.().catch(() => {});
+    enterFullscreen();
     setStarted(true);
   }
 
@@ -325,7 +370,12 @@ export default function Screen() {
     !data.hide_qr && !section?.data?.hide_qr && !bigQrShowing && section?.kind !== "video";
 
   return (
-    <main className="ev-screen" onDoubleClick={start}>
+    <main className={`ev-screen ${mouseActive ? "" : "ev-idle"}`} onDoubleClick={enterFullscreen}>
+      {!isFull && mouseActive && (
+        <button className="ev-fs-btn" onClick={enterFullscreen}>
+          ⛶ Full screen <small>(or press F)</small>
+        </button>
+      )}
       <div className="ev-stage" key={section?.id}>
         {!section && <p className="ev-sub">No sections yet — add some in /present/setup.</p>}
         {section?.kind === "title" && <TitleSection section={section} qr={qr} />}

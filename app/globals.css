@@ -2381,3 +2381,49 @@ button {
   letter-spacing: 0.04em;
   text-transform: uppercase;
 }
+
+/* Full-screen button on the big screen: only while the mouse is moving
+   and the page isn't already full screen. The cursor hides when idle. */
+.ev-screen.ev-idle {
+  cursor: none;
+}
+
+.ev-fs-btn {
+  position: absolute;
+  top: 2vh;
+  right: 2vw;
+  z-index: 20;
+  border: none;
+  border-radius: 999px;
+  padding: 12px 20px;
+  background: var(--white);
+  color: var(--forest);
+  font: inherit;
+  font-weight: 700;
+  font-size: 16px;
+  box-shadow: var(--shadow-md);
+  animation: ev-fade 0.2s ease both;
+}
+
+.ev-fs-btn small {
+  font-weight: 500;
+  opacity: 0.7;
+}
+
+.ev-r-now {
+  position: relative;
+}
+
+.ev-r-lock {
+  position: absolute;
+  top: 0;
+  right: 0;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  background: transparent;
+  color: var(--white);
+  border-radius: 999px;
+  padding: 4px 10px;
+  font: inherit;
+  font-size: 12px;
+  font-weight: 600;
+}

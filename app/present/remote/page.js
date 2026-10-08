@@ -13,32 +13,16 @@ import {
   stepCount,
   toRoman,
   useEvent,
+  usePinGate,
+  useWakeLock,
 } from "@/lib/event";
-
-// Keep the phone from sleeping mid-talk.
-function useWakeLock() {
-  useEffect(() => {
-    let lock = null;
-    async function acquire() {
-      try {
-        lock = await navigator.wakeLock?.request("screen");
-      } catch {}
-    }
-    acquire();
-    const onVisible = () => document.visibilityState === "visible" && acquire();
-    document.addEventListener("visibilitychange", onVisible);
-    return () => {
-      document.removeEventListener("visibilitychange", onVisible);
-      lock?.release?.().catch(() => {});
-    };
-  }, []);
-}
 
 function Remote() {
   const { sections, state, questions, error, loaded, updateState, setQuestions } = useEvent({
     withQuestions: true,
   });
   const [tab, setTab] = useState("live");
+  const pinGate = usePinGate();
   const [busy, setBusy] = useState(false);
   useWakeLock();
 
@@ -101,6 +85,11 @@ function Remote() {
             {steps > 1 && ` · slide ${step + 1}/${steps}`}
           </span>
           <strong>{section?.title || "—"}</strong>
+          {pinGate.enabled && (
+            <button className="ev-r-lock" onClick={pinGate.lock}>
+              🔒 Lock
+            </button>
+          )}
         </div>
         <nav className="ev-r-tabs">
           <button className={tab === "live" ? "on" : ""} onClick={() => setTab("live")}>
