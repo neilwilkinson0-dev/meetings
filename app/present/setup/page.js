@@ -5,7 +5,7 @@ import Link from "next/link";
 import QRCode from "qrcode";
 import PinGate from "../PinGate";
 import { getSupabase } from "@/lib/supabaseClient";
-import { KINDS, toRoman, uploadMedia, youTubeId } from "@/lib/event";
+import { AUDIENCE, KINDS, toRoman, uploadMedia, youTubeId } from "@/lib/event";
 
 const DEFAULTS = {
   title: { title: "New title screen", data: { show_big_qr: false } },
@@ -22,7 +22,6 @@ function Setup() {
   const [fun, setFun] = useState([]);
   const [newA, setNewA] = useState("");
   const [newB, setNewB] = useState("");
-  const [qCount, setQCount] = useState(0);
   const [open, setOpen] = useState(null);
   const [newKind, setNewKind] = useState("slides");
   const [newSerious, setNewSerious] = useState("");
@@ -32,17 +31,18 @@ function Setup() {
   async function load() {
     const supabase = getSupabase();
     if (!supabase) return setError("Supabase isn't configured — add your keys to .env.local.");
-    const [s, q, c, f] = await Promise.all([
+    const [s, q, f] = await Promise.all([
       supabase.from("event_sections").select("*").order("position"),
       supabase.from("serious_questions").select("*").order("created_at"),
-      supabase.from("event_questions").select("id", { count: "exact", head: true }),
       supabase.from("fun_questions").select("*").order("created_at"),
     ]);
     if (s.error) return setError("Couldn't load sections. Run supabase/event_schema.sql first.");
     setSections(s.data ?? []);
-    setSerious(q.data ?? []);
-    setFun(f.data ?? []);
-    setQCount(c.count ?? 0);
+    // Questions from the room sit at the top of each list.
+    const roomFirst = (rows) =>
+      [...(rows ?? [])].sort((a, b) => (a.source === AUDIENCE ? 0 : 1) - (b.source === AUDIENCE ? 0 : 1));
+    setSerious(roomFirst(q.data));
+    setFun(roomFirst(f.data));
   }
 
   useEffect(() => {
@@ -139,12 +139,27 @@ function Setup() {
     await getSupabase().from("fun_questions").delete().eq("id", id);
   }
 
+  const qCount = [...fun, ...serious].filter((q) => q.source === AUDIENCE).length;
+
   async function clearQuestions() {
-    if (!confirm(`Delete all ${qCount} audience questions? Do this before the session starts.`)) return;
+    if (
+      !confirm(
+        `Delete all ${qCount} questions sent in by the room, and reset the screen to the first section? Do this before the session starts.`
+      )
+    )
+      return;
     const supabase = getSupabase();
-    await supabase.from("event_questions").delete().not("id", "is", null);
-    await supabase.from("event_state").update({ data: {}, step: 0, section_id: sections[0]?.id ?? null, updated_at: new Date().toISOString() }).eq("id", 1);
-    setQCount(0);
+    await Promise.all([
+      supabase.from("fun_questions").delete().eq("source", AUDIENCE),
+      supabase.from("serious_questions").delete().eq("source", AUDIENCE),
+      supabase.from("event_questions").delete().not("id", "is", null),
+    ]);
+    await supabase
+      .from("event_state")
+      .update({ data: {}, step: 0, section_id: sections[0]?.id ?? null, updated_at: new Date().toISOString() })
+      .eq("id", 1);
+    setFun((qs) => qs.filter((q) => q.source !== AUDIENCE));
+    setSerious((qs) => qs.filter((q) => q.source !== AUDIENCE));
   }
 
   return (
@@ -258,11 +273,19 @@ function Setup() {
             <ul className="item-list">
               {fun.map((q) => (
                 <li key={q.id} className="item-row">
-                  <span className="grow ev-fun-pair">
-                    <EditField value={q.option_a} onSave={(v) => updateFun(q.id, { option_a: v })} />
-                    <span className="or">or</span>
-                    <EditField value={q.option_b} onSave={(v) => updateFun(q.id, { option_b: v })} />
-                  </span>
+                  {q.text ? (
+                    <span className="grow">
+                      {q.source === AUDIENCE && <RoomBadge />}
+                      <EditField value={q.text} onSave={(v) => updateFun(q.id, { text: v })} />
+                    </span>
+                  ) : (
+                    <span className="grow ev-fun-pair">
+                      {q.source === AUDIENCE && <RoomBadge />}
+                      <EditField value={q.option_a} onSave={(v) => updateFun(q.id, { option_a: v })} />
+                      <span className="or">or</span>
+                      <EditField value={q.option_b} onSave={(v) => updateFun(q.id, { option_b: v })} />
+                    </span>
+                  )}
                   <button className="icon-btn danger" onClick={() => removeFun(q.id)} aria-label="Delete">
                     ✕
                   </button>
@@ -287,6 +310,7 @@ function Setup() {
               {serious.map((q) => (
                 <li key={q.id} className="item-row">
                   <span className="grow">
+                    {q.source === AUDIENCE && <RoomBadge />}
                     <EditField value={q.text} onSave={(v) => updateSerious(q.id, v)} />
                   </span>
                   <button className="icon-btn danger" onClick={() => removeSerious(q.id)} aria-label="Delete">
@@ -300,6 +324,10 @@ function Setup() {
       </section>
     </main>
   );
+}
+
+function RoomBadge() {
+  return <span className="ev-room-badge">From the room</span>;
 }
 
 // Text that looks like plain text until clicked; saves on blur or Enter.

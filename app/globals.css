@@ -2285,3 +2285,98 @@ button {
   font-size: 16px;
   line-height: 1.5;
 }
+
+/* Audience questions: fun / serious choice on /ask, chips and badges. */
+
+.ev-ask-choices {
+  display: grid;
+  gap: 14px;
+  margin-top: 20px;
+}
+
+.ev-ask-choice {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  width: 100%;
+  text-align: left;
+  border: none;
+  border-radius: 18px;
+  padding: 22px 20px;
+  box-shadow: var(--shadow-md);
+  font-family: var(--font-body), sans-serif;
+}
+
+.ev-ask-choice strong {
+  display: block;
+  font-family: var(--font-display), serif;
+  font-size: 24px;
+  letter-spacing: 0.03em;
+}
+
+.ev-ask-choice small {
+  display: block;
+  font-size: 14px;
+  opacity: 0.85;
+  margin-top: 2px;
+}
+
+.ev-ask-choice.serious {
+  background: var(--green);
+  color: var(--white);
+}
+
+.ev-ask-choice.fun {
+  background: var(--gold);
+  color: var(--forest);
+}
+
+.ev-ask-choice-emoji {
+  font-size: 38px;
+}
+
+.ev-ask-back {
+  background: none;
+  border: none;
+  padding: 0;
+  margin-bottom: 10px;
+  font: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--green);
+}
+
+.ev-r-chip {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.ev-r-chip.fun {
+  background: #fbefd8;
+  color: var(--forest);
+}
+
+.ev-r-chip.serious {
+  background: var(--green-soft);
+  color: var(--green);
+}
+
+.ev-r-qs li.dim {
+  opacity: 0.6;
+}
+
+.ev-room-badge {
+  display: inline-block;
+  margin-bottom: 4px;
+  padding: 1px 8px;
+  border-radius: 999px;
+  background: var(--green-soft);
+  color: var(--green);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
