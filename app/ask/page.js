@@ -8,7 +8,7 @@ import { AUDIENCE } from "@/lib/event";
 const TYPES = {
   serious: {
     label: "Serious",
-    sub: "Work related",
+    sub: "Work related. This is definitely what we're here for. You really should be asking this sort of question.",
     emoji: "🤔",
     table: "serious_questions",
     prompt: "Ask us anything about AI in certification.",
@@ -16,7 +16,7 @@ const TYPES = {
   },
   fun: {
     label: "Fun",
-    sub: "Anything goes",
+    sub: "OK, go on then. Anything goes.",
     emoji: "🎉",
     table: "fun_questions",
     prompt: "Give us a fun question to answer.",
