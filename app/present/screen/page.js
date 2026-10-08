@@ -4,7 +4,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import QRCode from "qrcode";
 import Laurel from "../../components/Laurel";
 import { getSupabase } from "@/lib/supabaseClient";
-import { currentSection, useEvent, youTubeId } from "@/lib/event";
+import { currentSection, funText, useEvent, youTubeId } from "@/lib/event";
 
 function useQr(path) {
   const [qr, setQr] = useState({ src: "" });
@@ -214,10 +214,13 @@ function IcebreakerSection({ section, ice, pools }) {
 
   return (
     <div className="ev-ice">
-      <p className={`ev-ice-tag ${ice.type}`}>{ice.type === "serious" ? "🤔 Serious" : "🎉 Fun"}</p>
+      <p className={`ev-ice-tag ${ice.type}`}>
+        {ice.type === "serious" ? "🤔 Serious" : "🎉 Fun"}
+        {ice.audience && " · from the room"}
+      </p>
       {spinning ? (
         <p className="ev-ice-cycling">{cycling}</p>
-      ) : ice.type === "serious" ? (
+      ) : ice.text ? (
         <h1 className="ev-ice-q pop">{ice.text}</h1>
       ) : (
         <div className="ev-ice-wyr pop">
@@ -241,7 +244,6 @@ function QaSection({ section, question, count, qr }) {
         <h1 className="ev-qa-q pop" key={question.id}>
           “{question.body}”
         </h1>
-        {question.name && <p className="ev-qa-name">— {question.name}</p>}
       </div>
     );
   }
@@ -270,11 +272,11 @@ export default function Screen() {
     const supabase = getSupabase();
     if (!supabase) return;
     Promise.all([
-      supabase.from("fun_questions").select("option_a, option_b"),
+      supabase.from("fun_questions").select("option_a, option_b, text"),
       supabase.from("serious_questions").select("text"),
     ]).then(([f, s]) =>
       setPools({
-        fun: (f.data ?? []).map((r) => `${r.option_a} — or — ${r.option_b}`),
+        fun: (f.data ?? []).map(funText),
         serious: (s.data ?? []).map((r) => r.text),
       })
     );
@@ -337,7 +339,7 @@ export default function Screen() {
           <QaSection
             section={section}
             question={question}
-            count={questions.filter((q) => q.status !== "hidden").length}
+            count={questions.length}
             qr={qr}
           />
         )}

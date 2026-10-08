@@ -3,13 +3,13 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import PinGate from "../PinGate";
-import { getSupabase } from "@/lib/supabaseClient";
 import {
   KINDS,
   currentSection,
   goTo,
   navigate,
   pickIcebreaker,
+  removeAudienceQuestion,
   stepCount,
   toRoman,
   useEvent,
@@ -50,7 +50,12 @@ function Remote() {
   const step = state?.step ?? 0;
   const data = state?.data ?? {};
   const steps = stepCount(section);
-  const newQs = questions.filter((q) => q.status === "new");
+  // Audience questions are live in the ice breaker lists straight away;
+  // ones already drawn on screen count as asked.
+  const asked = new Set(data.ice_used ?? []);
+  const waiting = questions.filter((q) => !asked.has(q.id));
+  const waitingFun = waiting.filter((q) => q.type === "fun").length;
+  const waitingSerious = waiting.length - waitingFun;
 
   function move(dir) {
     const patch = navigate(sections, state, dir);
@@ -68,10 +73,11 @@ function Remote() {
     updateState({ data: { ...data, ...patch } });
   }
 
-  async function setStatus(q, status) {
-    setQuestions((qs) => qs.map((x) => (x.id === q.id ? { ...x, status } : x)));
-    await getSupabase().from("event_questions").update({ status }).eq("id", q.id);
+  async function remove(q) {
+    if (!confirm(`Remove this question?\n\n“${q.body}”`)) return;
+    setQuestions((qs) => qs.filter((x) => x.id !== q.id));
     if (data.question_id === q.id) setData({ question_id: null });
+    await removeAudienceQuestion(q);
   }
 
   function showQuestion(q) {
@@ -104,7 +110,7 @@ function Remote() {
             Sections
           </button>
           <button className={tab === "questions" ? "on" : ""} onClick={() => setTab("questions")}>
-            Questions{newQs.length > 0 && <span className="ev-r-badge">{newQs.length}</span>}
+            Questions{waiting.length > 0 && <span className="ev-r-badge">{waiting.length}</span>}
           </button>
         </nav>
       </header>
@@ -122,12 +128,15 @@ function Remote() {
                   🤔 Serious
                 </button>
               </div>
+              <p className="ev-r-muted">
+                From the room, waiting: {waitingFun} fun · {waitingSerious} serious. These are
+                drawn first.
+              </p>
               {data.ice && (
                 <>
                   <div className="ev-r-preview">
-                    {data.ice.type === "serious"
-                      ? data.ice.text
-                      : `${data.ice.a} — or — ${data.ice.b}`}
+                    {data.ice.audience && <strong>From the room: </strong>}
+                    {data.ice.text ?? `${data.ice.a} — or — ${data.ice.b}`}
                   </div>
                   <div className="ev-r-grid2">
                     <button className="ev-r-btn" disabled={busy} onClick={() => ice(data.ice.type)}>
@@ -190,20 +199,16 @@ function Remote() {
               {onScreen && (
                 <>
                   <div className="ev-r-preview">{onScreen.body}</div>
-                  <div className="ev-r-grid2">
-                    <button className="ev-r-btn" onClick={() => setStatus(onScreen, "answered")}>
-                      ✓ Answered
-                    </button>
-                    <button className="ev-r-btn" onClick={() => setData({ question_id: null })}>
-                      Clear screen
-                    </button>
-                  </div>
+                  <button className="ev-r-btn" onClick={() => setData({ question_id: null })}>
+                    Clear screen
+                  </button>
                 </>
               )}
               <QuestionList
-                questions={newQs}
+                questions={questions}
+                asked={asked}
                 onShow={showQuestion}
-                onStatus={setStatus}
+                onRemove={remove}
                 currentId={data.question_id}
               />
             </div>
@@ -248,35 +253,21 @@ function Remote() {
       {tab === "questions" && (
         <section className="ev-r-body">
           <div className="ev-r-panel">
-            <p className="ev-r-label">New ({newQs.length})</p>
+            <p className="ev-r-label">
+              From the room ({questions.length}) · {waiting.length} not asked yet
+            </p>
+            <p className="ev-r-muted">
+              These go straight into the ice breaker and are drawn first. Remove anything you
+              don&apos;t want to come up.
+            </p>
             <QuestionList
-              questions={newQs}
+              questions={questions}
+              asked={asked}
               onShow={showQuestion}
-              onStatus={setStatus}
+              onRemove={remove}
               currentId={data.question_id}
             />
           </div>
-          {questions.some((q) => q.status !== "new") && (
-            <div className="ev-r-panel">
-              <p className="ev-r-label">Done</p>
-              <ul className="ev-r-qs dim">
-                {questions
-                  .filter((q) => q.status !== "new")
-                  .map((q) => (
-                    <li key={q.id}>
-                      <p>{q.body}</p>
-                      <div className="ev-r-qmeta">
-                        <span>
-                          {q.status === "answered" ? "✓ answered" : "hidden"}
-                          {q.name && ` · ${q.name}`}
-                        </span>
-                        <button onClick={() => setStatus(q, "new")}>Restore</button>
-                      </div>
-                    </li>
-                  ))}
-              </ul>
-            </div>
-          )}
         </section>
       )}
 
@@ -292,17 +283,20 @@ function Remote() {
   );
 }
 
-function QuestionList({ questions, onShow, onStatus, currentId }) {
-  if (!questions.length) return <p className="ev-r-muted">No new questions yet.</p>;
+function QuestionList({ questions, asked, onShow, onRemove, currentId }) {
+  if (!questions.length) return <p className="ev-r-muted">No questions from the room yet.</p>;
   return (
     <ul className="ev-r-qs">
       {questions.map((q) => (
-        <li key={q.id} className={q.id === currentId ? "on" : ""}>
+        <li key={q.id} className={`${q.id === currentId ? "on" : ""} ${asked.has(q.id) ? "dim" : ""}`}>
           <p>{q.body}</p>
           <div className="ev-r-qmeta">
-            <span>{q.name || "Anonymous"}</span>
+            <span>
+              <span className={`ev-r-chip ${q.type}`}>{q.type === "fun" ? "🎉 Fun" : "🤔 Serious"}</span>
+              {asked.has(q.id) && " ✓ asked"}
+            </span>
             <span className="ev-r-qbtns">
-              <button onClick={() => onStatus(q, "hidden")}>Hide</button>
+              <button onClick={() => onRemove(q)}>Remove</button>
               <button className="primary" onClick={() => onShow(q)}>
                 Show
               </button>

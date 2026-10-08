@@ -113,3 +113,14 @@ create policy "anon full access fun_questions" on fun_questions
 insert into fun_questions (option_a, option_b, created_at)
 select option_a, option_b, created_at from wyr_questions
 where not exists (select 1 from fun_questions);
+
+-- Questions the audience sends in from /ask go straight into the ice
+-- breaker lists with source = 'audience' and are drawn first. Fun
+-- questions can be free text as well as a would-you-rather pair.
+alter table fun_questions add column if not exists text text;
+alter table fun_questions add column if not exists source text not null default 'host';
+alter table fun_questions alter column option_a drop not null;
+alter table fun_questions alter column option_b drop not null;
+alter table serious_questions add column if not exists source text not null default 'host';
+alter publication supabase_realtime add table fun_questions;
+alter publication supabase_realtime add table serious_questions;
