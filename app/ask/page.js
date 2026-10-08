@@ -1,21 +1,14 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Laurel from "../components/Laurel";
 import { getSupabase } from "@/lib/supabaseClient";
 
 export default function Ask() {
-  const [name, setName] = useState("");
   const [body, setBody] = useState("");
   const [sending, setSending] = useState(false);
   const [sent, setSent] = useState(0);
   const [error, setError] = useState("");
-
-  useEffect(() => {
-    try {
-      setName(localStorage.getItem("ask-name") || "");
-    } catch {}
-  }, []);
 
   async function submit(e) {
     e.preventDefault();
@@ -27,12 +20,9 @@ export default function Ask() {
     setError("");
     const { error } = await supabase
       .from("event_questions")
-      .insert({ name: name.trim().slice(0, 60), body: text.slice(0, 500) });
+      .insert({ body: text.slice(0, 500) });
     setSending(false);
     if (error) return setError("Couldn't send that — please try again.");
-    try {
-      localStorage.setItem("ask-name", name.trim());
-    } catch {}
     setBody("");
     setSent((n) => n + 1);
   }
@@ -65,13 +55,6 @@ export default function Ask() {
             value={body}
             onChange={(e) => setBody(e.target.value)}
             autoFocus
-          />
-          <input
-            className="input"
-            maxLength={60}
-            placeholder="Your name (optional)"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
           />
           <button className="btn big" type="submit" disabled={sending || !body.trim()}>
             {sending ? "Sending…" : "Send question"}

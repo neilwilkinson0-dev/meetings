@@ -300,7 +300,7 @@ function QuestionList({ questions, onShow, onStatus, currentId }) {
         <li key={q.id} className={q.id === currentId ? "on" : ""}>
           <p>{q.body}</p>
           <div className="ev-r-qmeta">
-            <span>{q.name || "Anonymous"}</span>
+            <span>{q.name}</span>
             <span className="ev-r-qbtns">
               <button onClick={() => onStatus(q, "hidden")}>Hide</button>
               <button className="primary" onClick={() => onShow(q)}>
