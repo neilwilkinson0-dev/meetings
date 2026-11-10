@@ -2,10 +2,9 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import QRCode from "qrcode";
-import { leadAndRest, lines, splitEmphasis, useDeckConfig } from "@/lib/eaaDeck";
+import { SLIDES, leadAndRest, lines, splitEmphasis, useDeckChannel, useDeckConfig } from "@/lib/eaaDeck";
 import { useWakeLock } from "@/lib/event";
 
-const SLIDES = ["intro", "certiverse", "agenda", "demo", "questions"];
 
 function useQr(url) {
   const [src, setSrc] = useState("");
@@ -244,6 +243,16 @@ export default function Deck() {
     if (next === i) return;
     setI(next);
   }, []);
+
+  // Phone remote: follow its "goto"s and tell it where we are.
+  const { send } = useDeckChannel({
+    onGoto: (p) => typeof p?.to === "number" && go(p.to),
+    onHello: () => send("state", { i: latest.current.i }),
+  });
+
+  useEffect(() => {
+    send("state", { i });
+  }, [i, send]);
 
   useEffect(() => {
     const onKey = (e) => {

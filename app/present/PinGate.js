@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { usePinGate } from "@/lib/event";
 
-export default function PinGate({ children }) {
+export default function PinGate({ children, label = "EATP 2026" }) {
   const { ok, attempt } = usePinGate();
   const [value, setValue] = useState("");
   const [wrong, setWrong] = useState(false);
@@ -12,7 +12,7 @@ export default function PinGate({ children }) {
 
   return (
     <main className="page ev-pin">
-      <p className="eyebrow">EATP 2026</p>
+      <p className="eyebrow">{label}</p>
       <h1 className="page-title">Enter PIN</h1>
       <form
         className="ev-pin-form"

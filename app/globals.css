@@ -2923,3 +2923,144 @@ button {
   border-radius: 8px;
   border: 1px solid var(--border);
 }
+
+/* eAA phone remote */
+.eaa-remote {
+  --cv-navy: #0b1b27;
+  --cv-green: #005236;
+  --cv-mint: #e3f5e8;
+  min-height: 100dvh;
+  max-width: 520px;
+  margin: 0 auto;
+  padding: 16px 18px calc(24px + env(safe-area-inset-bottom));
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  font-family: "Roboto", system-ui, sans-serif;
+  color: var(--cv-navy);
+  background: #fff;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.eaa-r-top {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  color: #3d4a54;
+}
+
+.eaa-r-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex: none;
+}
+
+.eaa-r-dot.ok { background: #00aa46; }
+.eaa-r-dot.wait { background: #e0a400; }
+.eaa-r-dot.bad { background: #c9503f; }
+
+.eaa-r-now {
+  background: var(--cv-mint);
+  border-radius: 18px;
+  padding: 22px 20px;
+}
+
+.eaa-r-kicker {
+  color: var(--cv-green);
+  font-size: 14px;
+}
+
+.eaa-r-now h1 {
+  font-family: "Syne", "Roboto", sans-serif;
+  font-weight: 500;
+  font-size: 30px;
+  line-height: 1.15;
+  margin-top: 6px;
+}
+
+.eaa-r-next {
+  margin-top: 8px;
+  font-size: 14px;
+  color: #3d4a54;
+  min-height: 1em;
+}
+
+.eaa-r-buttons {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 12px;
+}
+
+.eaa-r-buttons button {
+  border: 0;
+  border-radius: 18px;
+  padding: 0;
+  height: 30vh;
+  min-height: 140px;
+  font: inherit;
+  font-size: 22px;
+  font-weight: 500;
+  touch-action: manipulation;
+}
+
+.eaa-r-back {
+  background: var(--cv-mint);
+  color: var(--cv-green);
+}
+
+.eaa-r-fwd {
+  background: var(--cv-green);
+  color: #fff;
+}
+
+.eaa-r-buttons button:active:not(:disabled) {
+  transform: scale(0.98);
+}
+
+.eaa-r-buttons button:disabled,
+.eaa-r-list button:disabled {
+  opacity: 0.4;
+}
+
+.eaa-r-list {
+  list-style: none;
+  display: grid;
+  gap: 6px;
+}
+
+.eaa-r-list button {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-align: left;
+  background: #fff;
+  border: 1px solid #d5e9db;
+  border-radius: 12px;
+  padding: 12px 14px;
+  font: inherit;
+  font-size: 16px;
+  color: inherit;
+  touch-action: manipulation;
+}
+
+.eaa-r-list button span {
+  font-family: "Syne", sans-serif;
+  color: #00aa46;
+  width: 1.2em;
+}
+
+.eaa-r-list button.on {
+  background: var(--cv-mint);
+  border-color: var(--cv-green);
+  font-weight: 500;
+}
+
+.eaa-r-foot {
+  text-align: center;
+  font-size: 12px;
+  color: #3d4a54;
+}
