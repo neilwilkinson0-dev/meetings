@@ -25,6 +25,11 @@ export default function Eaa() {
           </p>
           <span className="play-hint">Open the deck →</span>
         </Link>
+        <Link href="/eaa/remote" className="game-card marquee">
+          <h2>3. Phone remote</h2>
+          <p>Open this on your phone to change slides from anywhere in the room.</p>
+          <span className="play-hint">Open remote →</span>
+        </Link>
       </div>
     </main>
   );
