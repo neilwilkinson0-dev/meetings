@@ -2427,3 +2427,499 @@ button {
   font-size: 12px;
   font-weight: 600;
 }
+
+/* ---------- eAA deck (/eaa) — Certiverse brand ---------- */
+
+.eaa-deck {
+  --cv-navy: #0b1b27;
+  --cv-green: #005236;
+  --cv-bright: #00aa46;
+  --cv-mint: #e3f5e8;
+  --cv-dim: #3d4a54;
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  background: #fff;
+  color: var(--cv-navy);
+  font-family: "Roboto", system-ui, sans-serif;
+  user-select: none;
+}
+
+.eaa-deck.eaa-idle {
+  cursor: none;
+}
+
+.eaa-slide {
+  position: absolute;
+  inset: 0;
+  animation: eaa-in 0.45s ease both;
+}
+
+@keyframes eaa-in {
+  from { opacity: 0; transform: translateY(1.2vh); }
+  to { opacity: 1; transform: none; }
+}
+
+.eaa-s {
+  position: absolute;
+  inset: 0;
+}
+
+.eaa-mint {
+  background: var(--cv-mint);
+}
+
+.eaa-white {
+  background: #fff;
+}
+
+.eaa-deck em {
+  font-style: normal;
+  color: var(--cv-green);
+}
+
+.eaa-h1,
+.eaa-title {
+  font-family: "Syne", "Roboto", sans-serif;
+  font-weight: 500;
+  color: var(--cv-navy);
+  line-height: 1.08;
+  letter-spacing: -0.01em;
+}
+
+.eaa-h1 {
+  font-size: clamp(32px, 4.4vw, 84px);
+}
+
+.eaa-big {
+  font-size: clamp(44px, 6.6vw, 128px);
+}
+
+.eaa-logo {
+  position: absolute;
+  top: 6vh;
+  left: 5vw;
+  height: clamp(22px, 3vw, 56px);
+  width: auto;
+}
+
+/* Slide 1 */
+.eaa-intro-body {
+  position: absolute;
+  inset: 16vh 5vw 8vh;
+  display: grid;
+  grid-template-columns: 1.5fr 1fr;
+  gap: 4vw;
+  align-items: center;
+}
+
+.eaa-title {
+  font-size: clamp(32px, 4.6vw, 88px);
+  margin-bottom: 5vh;
+}
+
+.eaa-name {
+  font-weight: 400;
+  color: var(--cv-green);
+  font-size: clamp(22px, 2.7vw, 52px);
+}
+
+.eaa-role {
+  font-size: clamp(14px, 1.55vw, 30px);
+  margin-top: 0.6vh;
+}
+
+.eaa-bar {
+  color: var(--cv-green);
+}
+
+.eaa-about {
+  list-style: none;
+  margin-top: 2.2vh;
+  display: grid;
+  gap: 0.8vh;
+  color: var(--cv-dim);
+  font-size: clamp(13px, 1.3vw, 24px);
+}
+
+.eaa-about li::before {
+  content: "→";
+  color: var(--cv-bright);
+  margin-right: 0.6em;
+}
+
+.eaa-pill {
+  display: inline-block;
+  margin-top: 4.5vh;
+  background: var(--cv-green);
+  color: #fff;
+  border-radius: 999px;
+  padding: 1.1vh 2.4vw;
+  font-size: clamp(14px, 1.45vw, 28px);
+}
+
+.eaa-photo-card {
+  position: relative;
+  justify-self: center;
+  background: #fff;
+  border-radius: 1.6vw;
+  padding: 1.6vw;
+  box-shadow: 0 1.4vh 4vh rgba(0, 82, 54, 0.12);
+}
+
+.eaa-photo {
+  display: block;
+  width: min(26vw, 50vh);
+  aspect-ratio: 1;
+  object-fit: cover;
+  border-radius: 0.8vw;
+}
+
+.eaa-photo-doodle {
+  position: absolute;
+  width: min(13vw, 25vh);
+  left: -8vw;
+  bottom: -6vh;
+}
+
+/* Slide 2 */
+.eaa-about-cv {
+  display: grid;
+  grid-template-columns: 22vw 1fr;
+}
+
+.eaa-ddd {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 4vh;
+}
+
+.eaa-ddd figure {
+  text-align: center;
+  animation: eaa-in 0.5s ease both;
+}
+
+.eaa-ddd figure img {
+  height: 16vh;
+  width: auto;
+}
+
+.eaa-ddd figcaption {
+  margin-top: 0.8vh;
+  font-weight: 700;
+  font-size: clamp(12px, 1.2vw, 22px);
+}
+
+.eaa-corner-mark {
+  position: absolute;
+  left: 2.5vw;
+  bottom: 4vh;
+  height: clamp(16px, 1.8vw, 34px);
+}
+
+.eaa-panel-mint {
+  margin: 2.4vh 2vw 2.4vh 0;
+  background: var(--cv-mint);
+  border-radius: 1.4vw;
+  padding: 7vh 4.5vw;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.eaa-panel-mint .eaa-h1 {
+  font-family: "Roboto", sans-serif;
+  font-weight: 400;
+  font-size: clamp(26px, 3.2vw, 62px);
+}
+
+.eaa-arrows {
+  list-style: none;
+  margin-top: 6vh;
+  display: grid;
+  gap: 4.2vh;
+}
+
+.eaa-arrows li {
+  display: grid;
+  grid-template-columns: 4vw 1fr;
+  gap: 2vw;
+  align-items: start;
+  font-size: clamp(14px, 1.5vw, 28px);
+  line-height: 1.45;
+  animation: eaa-in 0.5s ease both;
+}
+
+.eaa-arrow {
+  width: 100%;
+  margin-top: 0.4em;
+}
+
+/* Slides 3 + 4 */
+.eaa-with-strip {
+  display: grid;
+  grid-template-columns: 17vw 1fr;
+}
+
+.eaa-strip {
+  position: relative;
+  margin: 2.4vh 0 2.4vh 1.6vw;
+  background: var(--cv-mint);
+  border-radius: 1.4vw;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.eaa-strip-doodle {
+  width: 62%;
+  height: auto;
+  margin-top: -18vh;
+}
+
+.eaa-strip-mark {
+  position: absolute;
+  left: -0.6vw;
+  bottom: -1vh;
+  width: 9vh;
+  height: 9vh;
+  border-radius: 50%;
+  background: #fff;
+  display: grid;
+  place-items: center;
+}
+
+.eaa-strip-mark img {
+  width: 50%;
+}
+
+.eaa-strip-main {
+  padding: 0 8vw 0 6vw;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.eaa-stars {
+  position: absolute;
+  right: 3vw;
+  bottom: 4vh;
+  width: min(14vw, 24vh);
+  pointer-events: none;
+}
+
+.eaa-agenda {
+  list-style: none;
+  margin-top: 6vh;
+  display: grid;
+  gap: 2.6vh;
+  max-width: 62vw;
+}
+
+.eaa-agenda li {
+  display: flex;
+  align-items: baseline;
+  gap: 2vw;
+  font-size: clamp(18px, 2.2vw, 42px);
+  padding-bottom: 2.6vh;
+  border-bottom: 2px solid var(--cv-mint);
+  animation: eaa-in 0.5s ease both;
+}
+
+.eaa-agenda.two {
+  max-width: 66vw;
+  grid-template-rows: repeat(var(--rows), auto);
+  grid-auto-flow: column;
+  column-gap: 5vw;
+  row-gap: 2vh;
+}
+
+.eaa-agenda.two li {
+  padding-bottom: 2vh;
+}
+
+.eaa-num {
+  font-family: "Syne", sans-serif;
+  font-weight: 600;
+  color: var(--cv-bright);
+  font-variant-numeric: tabular-nums;
+}
+
+.eaa-kicker,
+.eaa-q-kicker {
+  color: var(--cv-green);
+  font-size: clamp(16px, 1.8vw, 34px);
+  margin-bottom: 1.6vh;
+}
+
+.eaa-sub {
+  margin-top: 2.4vh;
+  color: var(--cv-green);
+  font-size: clamp(18px, 2.2vw, 42px);
+}
+
+/* Slide 5 */
+.eaa-q-body {
+  position: absolute;
+  inset: 16vh 5vw 8vh;
+  display: grid;
+  grid-template-columns: 1.4fr 1fr;
+  gap: 4vw;
+  align-items: center;
+}
+
+.eaa-contact {
+  margin-top: 8vh;
+  font-size: clamp(14px, 1.45vw, 28px);
+}
+
+.eaa-contact-name {
+  color: var(--cv-green);
+  font-size: clamp(22px, 2.6vw, 50px);
+}
+
+.eaa-qr {
+  position: relative;
+  justify-self: center;
+  background: #fff;
+  border-radius: 1.6vw;
+  padding: 2vw;
+  text-align: center;
+  box-shadow: 0 1.4vh 4vh rgba(0, 82, 54, 0.14);
+}
+
+.eaa-qr-img {
+  display: block;
+  width: min(28vw, 50vh);
+  height: auto;
+  image-rendering: pixelated;
+}
+
+.eaa-qr-badge {
+  position: absolute;
+  width: min(7vw, 13vh);
+  top: -6vh;
+  right: -3vw;
+}
+
+.eaa-qr-label {
+  margin-top: 1.6vh;
+  font-weight: 500;
+  font-size: clamp(15px, 1.6vw, 30px);
+}
+
+.eaa-qr-url {
+  margin-top: 0.6vh;
+  font-size: clamp(12px, 1.1vw, 20px);
+  color: var(--cv-green);
+}
+
+/* Progress + controls */
+.eaa-dots {
+  position: absolute;
+  left: 50%;
+  bottom: 3.2vh;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 0.6vw;
+  transition: opacity 0.3s ease;
+}
+
+.eaa-idle .eaa-dots {
+  opacity: 0.35;
+}
+
+.eaa-dots button {
+  width: clamp(7px, 0.6vw, 12px);
+  height: clamp(7px, 0.6vw, 12px);
+  border-radius: 50%;
+  border: 0;
+  padding: 0;
+  background: rgba(0, 82, 54, 0.25);
+  transition: all 0.2s ease;
+}
+
+.eaa-dots button.on {
+  width: clamp(22px, 2vw, 38px);
+  border-radius: 999px;
+  background: var(--cv-green);
+}
+
+.eaa-controls {
+  position: absolute;
+  top: 2vh;
+  right: 2vw;
+  display: flex;
+  gap: 8px;
+  transition: opacity 0.3s ease;
+}
+
+.eaa-idle .eaa-controls {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.eaa-controls button,
+.eaa-controls a {
+  background: #fff;
+  color: var(--cv-green);
+  border: 1px solid rgba(0, 82, 54, 0.3);
+  border-radius: 999px;
+  padding: 6px 14px;
+  font: inherit;
+  font-size: 13px;
+}
+
+/* Setup page */
+.eaa-setup-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 24px 0;
+}
+
+.eaa-panel {
+  margin-bottom: 18px;
+  display: grid;
+  gap: 14px;
+}
+
+.eaa-field {
+  display: grid;
+  gap: 6px;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.eaa-field small {
+  font-weight: 400;
+  color: var(--ink-dim);
+}
+
+.eaa-field textarea.input {
+  resize: vertical;
+  font-family: inherit;
+  line-height: 1.5;
+}
+
+.eaa-check {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 15px;
+}
+
+.eaa-setup-qr {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.eaa-setup-qr img {
+  width: 140px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+}
