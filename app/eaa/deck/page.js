@@ -4,7 +4,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import QRCode from "qrcode";
 import { SLIDES, leadAndRest, lines, splitEmphasis, useDeckChannel, useDeckConfig } from "@/lib/eaaDeck";
 import { useWakeLock } from "@/lib/event";
-import FryUp from "./FryUp";
+import Breakfast from "./Breakfast";
 
 
 function useQr(url) {
@@ -208,15 +208,16 @@ function QuestionsSlide({ c, qr }) {
   );
 }
 
-function FryUpSlide({ c }) {
+function BreakfastSlide({ c }) {
   return (
-    <div className="eaa-s eaa-fryup">
-      <FryUp />
-      <div className="eaa-fryup-caption">
-        {c.fryupKicker && <p className="eaa-q-kicker">{c.fryupKicker}</p>}
+    <div className="eaa-s eaa-breakfast">
+      <Breakfast />
+      <div className="eaa-breakfast-caption">
+        {c.breakfastKicker && <p className="eaa-q-kicker">{c.breakfastKicker}</p>}
         <h1 className="eaa-h1">
-          <Em text={c.fryupTitle} />
+          <Em text={c.breakfastTitle} />
         </h1>
+        {c.breakfastSub && <p className="eaa-breakfast-sub">{c.breakfastSub}</p>}
       </div>
     </div>
   );
@@ -344,7 +345,7 @@ export default function Deck() {
           {slide === "agenda" && <AgendaSlide c={c} />}
           {slide === "demo" && <DemoSlide c={c} />}
           {slide === "questions" && <QuestionsSlide c={c} qr={qr} />}
-          {slide === "fryup" && <FryUpSlide c={c} />}
+          {slide === "breakfast" && <BreakfastSlide c={c} />}
         </section>
       )}
 
