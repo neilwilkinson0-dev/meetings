@@ -119,6 +119,11 @@ export default function Setup() {
         )}
       </section>
 
+      <section className="panel eaa-panel">
+        <h2>6 · Bonus: Tim&apos;s fry up</h2>
+        <Field label="Small line above" k="fryupKicker" {...p} />
+        <Field label="Caption" k="fryupTitle" hint="Wrap words in *asterisks* to make them green." {...p} />
+      </section>
     </main>
   );
 }
