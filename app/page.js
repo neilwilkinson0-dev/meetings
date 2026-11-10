@@ -77,8 +77,8 @@ export default function Home() {
           <Link href="/eaa" className="game-card marquee">
             <h2>eAA 2026</h2>
             <p>
-              Five slides: who I am, who Certiverse is, the agenda, a jump to
-              the live demo, then questions with a QR code to the free trial.
+              Five slides: who I am, who Certiverse is, the agenda, a live demo
+              slide, then questions with a QR code to the free trial.
             </p>
             <span className="play-hint">Enter the stage →</span>
           </Link>

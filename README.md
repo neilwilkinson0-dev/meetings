@@ -33,15 +33,13 @@ fun list (seeded from the Would You Rather questions, edited separately) and
 serious list.
 
 **eAA 2026** — a five-slide deck at `/eaa/deck`: intro (who I am), who
-Certiverse is, what I'll cover, a demo slide that opens the live demo in its own
-tab, and a questions slide with a QR code (defaults to
+Certiverse is, what I'll cover, a demo title slide (switch to the demo tab yourself), and a questions slide with a QR code (defaults to
 `https://certiverse.com/#/trial`). Styled to the Certiverse brand (mint/white, Syne +
-Roboto, the green line doodles in `public/media/eaa/brand`). Every word, the
-demo link and the QR target are editable at `/eaa/setup`; wrap words in
+Roboto, the green line doodles in `public/media/eaa/brand`). Every word and the
+QR target are editable at `/eaa/setup`; wrap words in
 `*asterisks*` to colour them green; edits save in that browser
 (localStorage), so set it up on the presenting laptop. No Supabase needed.
-Keys: → / space / clicker = next, ← = back, 1–5 jump, F = full screen,
-D = reopen the demo tab. Defaults live in `lib/eaaDeck.js`.
+Keys: → / space / clicker = next, ← = back, 1–5 jump, F = full screen. Defaults live in `lib/eaaDeck.js`.
 
 ## Stack
 
@@ -66,7 +64,7 @@ Next.js 14 (App Router) · Supabase · Vercel — same shape as your other tools
 - `/present/remote` — the phone remote
 - `/ask` — the audience question form the QR code points to
 - `/eaa` — eAA deck lobby
-- `/eaa/setup` — edit the deck's text, demo link and QR code target
+- `/eaa/setup` — edit the deck's text and QR code target
 - `/eaa/deck` — the deck itself
 
 ## 1. Supabase setup

@@ -6,7 +6,6 @@ import { leadAndRest, lines, splitEmphasis, useDeckConfig } from "@/lib/eaaDeck"
 import { useWakeLock } from "@/lib/event";
 
 const SLIDES = ["intro", "certiverse", "agenda", "demo", "questions"];
-const DEMO = SLIDES.indexOf("demo");
 
 function useQr(url) {
   const [src, setSrc] = useState("");
@@ -17,19 +16,6 @@ function useQr(url) {
       .catch(() => setSrc(""));
   }, [url]);
   return src;
-}
-
-// Opens (or re-focuses) the demo in its own named tab, so pressing it
-// twice doesn't pile up tabs.
-function openDemo(url) {
-  if (!url) return;
-  const w = window.open(url, "eaa-demo");
-  if (w) {
-    try {
-      w.opener = null;
-    } catch {}
-    w.focus?.();
-  }
 }
 
 const B = "/media/eaa/brand";
@@ -188,16 +174,6 @@ function DemoSlide({ c }) {
           <Em text={c.demoTitle} />
         </h1>
         {c.demoSubtitle && <p className="eaa-sub">{c.demoSubtitle}</p>}
-        <button
-          className="eaa-demo-btn"
-          onClick={(e) => {
-            e.stopPropagation();
-            openDemo(c.demoUrl);
-          }}
-        >
-          Open the demo →
-        </button>
-        <p className="eaa-hint">Press D or Enter to open it again · → for questions when you&apos;re back</p>
       </div>
       <Img src={`${B}/stars.webp`} className="eaa-stars" />
     </div>
@@ -262,32 +238,25 @@ export default function Deck() {
     history.replaceState(null, "", `#${i + 1}`);
   }, [i]);
 
-  // Called from a key press or click, so the browser treats the demo tab
-  // as user-initiated and doesn't block it.
-  const go = useCallback((to) => {
-    const { i, c } = latest.current;
+    const go = useCallback((to) => {
+    const { i } = latest.current;
     const next = Math.max(0, Math.min(SLIDES.length - 1, to));
     if (next === i) return;
     setI(next);
-    if (next === DEMO && next > i && c.autoOpenDemo) openDemo(c.demoUrl);
   }, []);
 
   useEffect(() => {
     const onKey = (e) => {
       if (e.metaKey || e.ctrlKey || e.altKey) return;
-      const { i, c } = latest.current;
+      const { i } = latest.current;
       switch (e.key) {
         case "ArrowRight":
         case "ArrowDown":
         case "PageDown":
+        case "Enter":
         case " ":
           e.preventDefault();
           go(i + 1);
-          break;
-        case "Enter":
-          e.preventDefault();
-          if (i === DEMO) openDemo(c.demoUrl);
-          else go(i + 1);
           break;
         case "ArrowLeft":
         case "ArrowUp":
@@ -301,10 +270,6 @@ export default function Deck() {
           break;
         case "End":
           go(SLIDES.length - 1);
-          break;
-        case "d":
-        case "D":
-          openDemo(c.demoUrl);
           break;
         case "f":
         case "F":

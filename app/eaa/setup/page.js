@@ -101,8 +101,6 @@ export default function Setup() {
         <h2>4 · Demo</h2>
         <Field label="Heading" k="demoTitle" hint="Wrap words in *asterisks* to make them green." {...p} />
         <Field label="Subheading" k="demoSubtitle" {...p} />
-        <Field label="Demo URL" k="demoUrl" type="url" {...p} hint="Opens in its own tab." />
-        <Check label="Open the demo tab automatically when I move onto this slide" k="autoOpenDemo" {...p} />
       </section>
 
       <section className="panel eaa-panel">
