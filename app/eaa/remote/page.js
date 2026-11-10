@@ -1,9 +1,29 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import PinGate from "../../present/PinGate";
 import { SLIDES, SLIDE_LABELS, useDeckChannel } from "@/lib/eaaDeck";
 import { useWakeLock } from "@/lib/event";
+
+const DEMO = SLIDES.indexOf("demo");
+
+// Which demo steps you've ticked off, kept on the phone so a refresh
+// mid-demo doesn't lose your place.
+function useDemoTicks() {
+  const [done, setDone] = useState([]);
+  useEffect(() => {
+    try {
+      setDone(JSON.parse(localStorage.getItem("eaa-demo-done") || "[]"));
+    } catch {}
+  }, []);
+  function save(next) {
+    setDone(next);
+    try {
+      localStorage.setItem("eaa-demo-done", JSON.stringify(next));
+    } catch {}
+  }
+  return [done, save];
+}
 
 const STATUS = {
   connecting: "Connecting…",
@@ -15,9 +35,14 @@ const STATUS = {
 function Remote() {
   // null until the deck tells us where it is.
   const [i, setI] = useState(null);
+  const [agenda, setAgenda] = useState([]);
+  const [done, setDone] = useDemoTicks();
   const awake = useWakeLock();
   const { status, send } = useDeckChannel({
-    onState: (p) => typeof p?.i === "number" && setI(p.i),
+    onState: (p) => {
+      if (typeof p?.i === "number") setI(p.i);
+      if (Array.isArray(p?.agenda)) setAgenda(p.agenda);
+    },
   });
 
   function go(to) {
@@ -29,6 +54,12 @@ function Remote() {
 
   const live = status === "connected";
   const deckSeen = i !== null;
+  const onDemo = i === DEMO;
+
+  function toggle(item) {
+    setDone(done.includes(item) ? done.filter((d) => d !== item) : [...done, item]);
+    navigator.vibrate?.(10);
+  }
 
   return (
     <main className="eaa-remote">
@@ -47,7 +78,28 @@ function Remote() {
         </p>
       </section>
 
-      <div className="eaa-r-buttons">
+      {onDemo && agenda.length > 0 && (
+        <section className="eaa-r-demo">
+          <div className="eaa-r-demo-head">
+            <h2>Demo checklist</h2>
+            {done.length > 0 && (
+              <button onClick={() => setDone([])}>Reset</button>
+            )}
+          </div>
+          <ol>
+            {agenda.map((item, n) => (
+              <li key={item}>
+                <button className={done.includes(item) ? "done" : ""} onClick={() => toggle(item)}>
+                  <span className="eaa-r-tick">{done.includes(item) ? "✓" : n + 1}</span>
+                  <span className="eaa-r-item">{item}</span>
+                </button>
+              </li>
+            ))}
+          </ol>
+        </section>
+      )}
+
+      <div className={`eaa-r-buttons ${onDemo ? "compact" : ""}`}>
         <button className="eaa-r-back" disabled={!live || i === 0} onClick={() => go((i ?? 0) - 1)}>
           ← Back
         </button>

@@ -247,12 +247,14 @@ export default function Deck() {
   // Phone remote: follow its "goto"s and tell it where we are.
   const { send } = useDeckChannel({
     onGoto: (p) => typeof p?.to === "number" && go(p.to),
-    onHello: () => send("state", { i: latest.current.i }),
+    onHello: () => send("state", { i: latest.current.i, agenda: lines(latest.current.c.agendaItems) }),
   });
 
+  // The agenda doubles as the phone's demo checklist.
+  const agendaKey = c.agendaItems;
   useEffect(() => {
-    send("state", { i });
-  }, [i, send]);
+    send("state", { i, agenda: lines(agendaKey) });
+  }, [i, agendaKey, send]);
 
   useEffect(() => {
     const onKey = (e) => {
