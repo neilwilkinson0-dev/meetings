@@ -115,7 +115,7 @@ function buildScene(THREE, el) {
   add(
     new THREE.PlaneGeometry(0.98, 0.58),
     new THREE.MeshBasicMaterial({
-      map: textTexture(["TODAY'S BAKES", "Victoria sponge", "Americano"], {
+      map: textTexture(["TODAY'S MENU", "Victoria sponge", "Americano"], {
         w: 640,
         h: 380,
         bg: "#23282a",
@@ -231,68 +231,135 @@ function buildScene(THREE, el) {
 
   const steel = mat("#cfd3d6", { metalness: 0.8, roughness: 0.3 });
 
-  // ---------- Tim (cartoon) ----------
-  const skin = mat("#f1c6a6", { roughness: 0.6 });
-  const shirt = mat("#f7f8fb", { roughness: 0.8 });
-  const hairM = mat("#6b4a2e", { roughness: 0.9 });
+  // ---------- Tim (stylised, not a likeness) ----------
+  const skin = mat("#e8b896", { roughness: 0.55 });
+  const shirt = mat("#f6f7fa", { roughness: 0.75 });
+  const hairM = mat("#5e4029", { roughness: 0.85 });
   const tim = new THREE.Group();
   tim.position.set(0, 0, -0.62);
   scene.add(tim);
-  // Chair back
+  // Chair
   add(new THREE.BoxGeometry(0.5, 0.7, 0.05), mat("#3b2a20"), [0, 0.95, -0.2], tim);
   add(new THREE.BoxGeometry(0.5, 0.05, 0.45), mat("#3b2a20"), [0, 0.46, 0], tim);
-  // Body
-  add(new THREE.CapsuleGeometry(0.16, 0.2, 8, 20), shirt, [0, 1.07, 0], tim, { scale: [1.2, 1, 0.8] });
-  add(new THREE.CylinderGeometry(0.05, 0.055, 0.08, 14), skin, [0, 1.36, 0.01], tim);
-  // Open collar: two flaps and a V of skin
+
+  // Torso: a lathed shirt with real shoulders, flattened front to back.
+  const profile = [
+    [0.0, 0.5], [0.15, 0.5], [0.16, 0.7], [0.175, 0.95], [0.19, 1.12], [0.2, 1.22],
+    [0.19, 1.28], [0.15, 1.32], [0.09, 1.345], [0.05, 1.35],
+  ].map(([r, y]) => new THREE.Vector2(r, y));
+  add(new THREE.LatheGeometry(profile, 40), shirt, [0, 0, 0], tim, { scale: [1, 1, 0.64] });
+  // Button placket and buttons
+  add(new THREE.BoxGeometry(0.022, 0.42, 0.004), mat("#eceef2"), [0, 1.03, 0.118], tim, { rot: [-0.06, 0, 0] });
+  for (let k = 0; k < 4; k++) add(new THREE.CylinderGeometry(0.004, 0.004, 0.003, 10), mat("#d8dbe0"), [0, 1.2 - k * 0.1, 0.122 + k * 0.004], tim, { rot: [Math.PI / 2, 0, 0] });
+  // Neck, open collar and a V of skin
+  add(new THREE.CylinderGeometry(0.045, 0.05, 0.12, 18), skin, [0, 1.38, 0.0], tim);
   [-1, 1].forEach((s) =>
-    add(new THREE.BoxGeometry(0.075, 0.05, 0.012), shirt, [s * 0.05, 1.33, 0.1], tim, { rot: [-0.5, s * 0.35, s * 0.55] })
+    add(new THREE.BoxGeometry(0.07, 0.055, 0.01), shirt, [s * 0.045, 1.335, 0.075], tim, { rot: [-0.45, s * 0.45, s * 0.6] })
   );
-  add(new THREE.ConeGeometry(0.04, 0.12, 3), skin, [0, 1.28, 0.115], tim, { rot: [Math.PI - 0.15, 0, 0], scale: [1, 1, 0.3] });
+  add(new THREE.ConeGeometry(0.035, 0.1, 3), skin, [0, 1.29, 0.098], tim, { rot: [Math.PI - 0.2, 0, 0], scale: [1, 1, 0.3] });
 
   // Head (its own group so it can nod while chewing)
   const head = new THREE.Group();
   head.position.set(0, 1.5, 0.02);
   tim.add(head);
-  add(new THREE.SphereGeometry(0.125, 32, 24), skin, [0, 0, 0], head, { scale: [0.95, 1.08, 0.95] });
-  add(new THREE.SphereGeometry(0.128, 32, 16, 0, Math.PI * 2, 0, Math.PI * 0.42), hairM, [0, 0.014, -0.008], head, { scale: [0.98, 1.08, 0.99], rot: [-0.32, 0, 0.06] });
-  add(new THREE.SphereGeometry(0.05, 14, 10), hairM, [0.03, 0.105, 0.04], head, { scale: [1.4, 0.45, 1] });
+  add(new THREE.SphereGeometry(0.095, 40, 32), skin, [0, 0, 0], head, { scale: [0.93, 1.2, 1.0] });
+  // Jaw and chin fill out the lower face
+  add(new THREE.SphereGeometry(0.075, 28, 20), skin, [0, -0.05, 0.02], head, { scale: [1, 0.9, 1] });
+
+  // Hair: swept-back top with a side parting, shorter at the sides
+  add(new THREE.SphereGeometry(0.098, 36, 18, 0, Math.PI * 2, 0, Math.PI * 0.4), hairM, [0, 0.006, -0.004], head, { scale: [0.97, 1.2, 1.04], rot: [-0.22, 0, 0] });
+  add(new THREE.SphereGeometry(0.045, 20, 12), hairM, [0.015, 0.098, 0.028], head, { scale: [1.3, 0.42, 1.25], rot: [0.15, 0, -0.1] });
+  // sides and back only (leave the face, phi 0.2π–0.8π, clear)
+  add(new THREE.SphereGeometry(0.097, 28, 14, Math.PI * 0.8, Math.PI * 1.4, Math.PI * 0.28, Math.PI * 0.3), hairM, [0, 0, 0], head, { scale: [0.97, 1.2, 1.03] });
+
+  // Ears
   [-1, 1].forEach((s) => {
-    add(new THREE.SphereGeometry(0.026, 12, 10), skin, [s * 0.118, -0.005, 0], head, { scale: [0.5, 1, 0.8] });
-    add(new THREE.SphereGeometry(0.014, 12, 10), mat("#2c4a66", { roughness: 0.3 }), [s * 0.043, 0.02, 0.112], head);
-    add(new THREE.SphereGeometry(0.004, 8, 6), mat("#ffffff"), [s * 0.043 + 0.005, 0.026, 0.124], head, { shadow: false });
-    add(new THREE.BoxGeometry(0.04, 0.008, 0.01), hairM, [s * 0.045, 0.052, 0.112], head, { rot: [0, 0, s * -0.12] });
+    add(new THREE.SphereGeometry(0.03, 16, 12), skin, [s * 0.088, -0.005, -0.004], head, { scale: [0.38, 1, 0.72], rot: [0, s * 0.3, 0] });
+    add(new THREE.SphereGeometry(0.015, 10, 8), mat("#d39f80"), [s * 0.094, -0.005, -0.002], head, { scale: [0.3, 1, 0.6] });
   });
-  add(new THREE.SphereGeometry(0.018, 12, 10), mat("#e8b394"), [0, -0.005, 0.124], head, { scale: [0.9, 1, 1] });
-  // Short beard along the jaw and a moustache
-  const beardM = mat("#7a5232", { roughness: 1 });
-  add(new THREE.SphereGeometry(0.123, 28, 16, 0, Math.PI * 2, Math.PI * 0.55, Math.PI * 0.45), beardM, [0, -0.012, 0.006], head, { scale: [0.98, 1.1, 0.99] });
-  add(new THREE.TorusGeometry(0.03, 0.009, 8, 16, Math.PI), beardM, [0, -0.045, 0.108], head, { scale: [1, 0.5, 0.6] });
-  // Mouth: dark oval that opens for each bite
-  const mouth = add(new THREE.SphereGeometry(0.03, 16, 10), mat("#5a1f1f"), [0, -0.06, 0.112], head, { scale: [0.9, 0.25, 0.4], shadow: false });
+
+  // Eyes: whites, blue-grey irises, pupils, a catchlight and a lid
+  [-1, 1].forEach((s) => {
+    const e = new THREE.Group();
+    e.position.set(s * 0.034, 0.022, 0.077);
+    head.add(e);
+    add(new THREE.SphereGeometry(0.0155, 18, 14), mat("#f7f4ef", { roughness: 0.2 }), [0, 0, 0], e, { scale: [1.15, 0.9, 0.7] });
+    add(new THREE.SphereGeometry(0.0085, 16, 12), mat("#4f6f88", { roughness: 0.25 }), [0, 0, 0.0095], e, { scale: [1, 1, 0.5] });
+    add(new THREE.SphereGeometry(0.0042, 12, 10), mat("#111214", { roughness: 0.2 }), [0, 0, 0.0125], e, { scale: [1, 1, 0.5] });
+    add(new THREE.SphereGeometry(0.0016, 8, 6), new THREE.MeshBasicMaterial({ color: "#ffffff" }), [0.003, 0.003, 0.0145], e, { shadow: false });
+    add(new THREE.SphereGeometry(0.017, 18, 10, 0, Math.PI * 2, 0, Math.PI * 0.3), skin, [0, 0.002, -0.001], e, { scale: [1.15, 0.95, 0.85], rot: [0.75, 0, 0] });
+    // Brows
+    add(new THREE.CapsuleGeometry(0.0045, 0.03, 4, 8), hairM, [s * 0.002, 0.024, 0.008], e, { rot: [0, 0, Math.PI / 2 + s * 0.12] });
+  });
+
+  // Nose: bridge and tip
+  add(new THREE.CapsuleGeometry(0.0105, 0.035, 6, 12), skin, [0, 0.0, 0.088], head, { rot: [0.35, 0, 0] });
+  add(new THREE.SphereGeometry(0.016, 16, 12), skin, [0, -0.022, 0.099], head, { scale: [1.15, 0.85, 1] });
+  [-1, 1].forEach((s) => add(new THREE.SphereGeometry(0.009, 10, 8), skin, [s * 0.012, -0.027, 0.094], head));
+
+  // Short, stubbly beard and moustache
+  const stubble = (() => {
+    const c = document.createElement("canvas");
+    c.width = c.height = 256;
+    const g = c.getContext("2d");
+    g.fillStyle = "#6a4528";
+    g.fillRect(0, 0, 256, 256);
+    for (let k = 0; k < 2600; k++) {
+      const v = Math.random();
+      g.fillStyle = v > 0.5 ? "rgba(40,24,14,0.5)" : "rgba(150,105,70,0.35)";
+      g.fillRect(Math.random() * 256, Math.random() * 256, 1.5, 2.5);
+    }
+    const t = new THREE.CanvasTexture(c);
+    t.colorSpace = THREE.SRGBColorSpace;
+    return t;
+  })();
+  const beardM = new THREE.MeshStandardMaterial({ map: stubble, roughness: 1 });
+  add(new THREE.SphereGeometry(0.079, 32, 20, 0, Math.PI * 2, Math.PI * 0.42, Math.PI * 0.58), beardM, [0, -0.05, 0.022], head, { scale: [1.04, 0.95, 1.04] });
+  add(new THREE.SphereGeometry(0.097, 32, 16, -Math.PI * 0.05, Math.PI * 1.1, Math.PI * 0.56, Math.PI * 0.2), beardM, [0, 0, 0.002], head, { scale: [0.95, 1.2, 1.01] });
+  add(new THREE.TorusGeometry(0.022, 0.0075, 8, 18, Math.PI), beardM, [0, -0.044, 0.104], head, { scale: [1.15, 0.55, 0.7] });
+
+  // Mouth: dark opening that grows for each bite, with lips
+  const mouth = add(new THREE.SphereGeometry(0.018, 16, 10), mat("#4a1717"), [0, -0.058, 0.104], head, { scale: [1, 0.25, 0.45], shadow: false });
+  add(new THREE.CapsuleGeometry(0.0035, 0.024, 4, 8), mat("#b9736a"), [0, -0.052, 0.107], head, { rot: [0, 0, Math.PI / 2] });
+  const lowerLip = add(new THREE.CapsuleGeometry(0.0045, 0.022, 4, 8), mat("#c47f75"), [0, -0.063, 0.106], head, { rot: [0, 0, Math.PI / 2] });
+
   // Lanyard + badge
   const lanyardMat = mat("#1f6fd1");
-  const neckL = new THREE.Vector3(-0.05, 1.33, 0.06);
-  const neckR = new THREE.Vector3(0.05, 1.33, 0.06);
-  const badgeTop = new THREE.Vector3(0, 1.12, 0.145);
-  [neckL, neckR].forEach((n) => limb(0.006, lanyardMat).userData.set(n.clone().add(tim.position), badgeTop.clone().add(tim.position)));
+  const badgeTop = new THREE.Vector3(0, 1.13, 0.13);
+  [-0.045, 0.045].forEach((x) =>
+    limb(0.005, lanyardMat).userData.set(new THREE.Vector3(x, 1.34, 0.045).add(tim.position), badgeTop.clone().add(tim.position))
+  );
   add(
-    new THREE.PlaneGeometry(0.1, 0.13),
-    new THREE.MeshStandardMaterial({ map: textTexture(["HELLO", "TIM"], { w: 256, h: 320, font: "bold 80px Roboto, sans-serif" }), roughness: 0.5 }),
-    [0, 1.05, 0.15],
+    new THREE.PlaneGeometry(0.12, 0.12),
+    new THREE.MeshStandardMaterial({
+      map: textTexture(["Hi!", "I'm Tim"], { w: 300, h: 300, font: "bold 84px Roboto, sans-serif" }),
+      roughness: 0.5,
+    }),
+    [0, 1.065, 0.135],
     tim,
-    { rot: [-0.18, 0, 0] }
+    { rot: [-0.1, 0, 0] }
   );
 
-  // Arms: shoulder -> elbow -> hand, re-aimed every frame.
+  // Arms: shoulder -> elbow -> wrist in shirt sleeves, with hands.
   const W = (x, y, z) => new THREE.Vector3(x, y, z).add(tim.position);
+  function makeHand() {
+    const h = new THREE.Group();
+    scene.add(h);
+    add(new THREE.SphereGeometry(0.03, 16, 12), skin, [0, 0, 0.03], h, { scale: [1, 0.55, 1.15] });
+    for (let k = 0; k < 4; k++)
+      add(new THREE.CapsuleGeometry(0.0075, 0.02, 4, 8), skin, [(k - 1.5) * 0.0145, -0.008, 0.062], h, { rot: [1.2, 0, 0] });
+    add(new THREE.CapsuleGeometry(0.008, 0.025, 4, 8), skin, [0.03, 0.004, 0.04], h, { rot: [0.6, 0, -0.9] });
+    add(new THREE.CylinderGeometry(0.038, 0.038, 0.02, 16), shirt, [0, 0, -0.005], h, { rot: [Math.PI / 2, 0, 0] });
+    return h;
+  }
   const arms = [-1, 1].map((s) => ({
     s,
-    shoulder: W(s * 0.21, 1.25, 0),
-    upper: limb(0.045, shirt),
-    fore: limb(0.04, shirt),
-    hand: add(new THREE.SphereGeometry(0.035, 14, 10), skin),
-    elbowBall: add(new THREE.SphereGeometry(0.045, 12, 10), shirt),
+    shoulder: W(s * 0.2, 1.255, 0),
+    upper: limb(0.043, shirt),
+    fore: limb(0.037, shirt),
+    hand: makeHand(),
+    elbowBall: add(new THREE.SphereGeometry(0.042, 14, 12), shirt),
+    shoulderBall: add(new THREE.SphereGeometry(0.044, 16, 12), shirt, W(s * 0.2, 1.255, 0).toArray()),
   }));
   // A cake fork in his right hand; his left rests by the coffee.
   const fork = new THREE.Group();
@@ -308,7 +375,7 @@ function buildScene(THREE, el) {
   add(new THREE.BoxGeometry(0.026, 0.011, 0.022), sponge, [0, 0.011, 0], bite);
 
   const forkRest = new THREE.Vector3(0.06, TOP + 0.09, -0.16);
-  const forkMouth = new THREE.Vector3(0.02, 1.38, -0.37); // hand under the chin, tines at the mouth
+  const forkMouth = new THREE.Vector3(0.015, 1.36, -0.38); // hand under the chin, tines at the mouth
   const restHand = new THREE.Vector3(-0.15, TOP + 0.04, -0.2);
   const tmp = new THREE.Vector3();
 
@@ -319,7 +386,9 @@ function buildScene(THREE, el) {
     arm.upper.userData.set(arm.shoulder, elbow);
     arm.fore.userData.set(elbow, hand);
     arm.elbowBall.position.copy(elbow);
+    // Hand points along the forearm.
     arm.hand.position.copy(hand);
+    arm.hand.quaternion.setFromUnitVectors(new THREE.Vector3(0, 0, 1), hand.clone().sub(elbow).normalize());
   }
 
   // ---------- lights ----------
@@ -362,6 +431,7 @@ function buildScene(THREE, el) {
     // Mouth opens as the fork arrives, then chews.
     const open = c > 1.8 && c < 2.35 ? clamp01((c - 1.8) / 0.3) : c >= 2.35 && c < 3.4 ? 0.35 + 0.35 * Math.abs(Math.sin((c - 2.35) * 9)) : 0;
     mouth.scale.y = 0.25 + open * 0.75;
+    lowerLip.position.y = -0.063 - open * 0.012;
     head.rotation.x = -0.12 + up * 0.08 + (c > 2.35 && c < 3.4 ? Math.sin((c - 2.35) * 9) * 0.02 : 0);
     head.rotation.z = Math.sin(t * 0.7) * 0.03;
 
