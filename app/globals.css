@@ -3064,3 +3064,86 @@ button {
   font-size: 12px;
   color: #3d4a54;
 }
+
+.eaa-r-demo {
+  border: 2px solid var(--cv-green);
+  border-radius: 18px;
+  padding: 14px;
+}
+
+.eaa-r-demo-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.eaa-r-demo h2 {
+  font-family: "Syne", "Roboto", sans-serif;
+  font-weight: 500;
+  font-size: 20px;
+  color: var(--cv-green);
+}
+
+.eaa-r-demo-head button {
+  background: none;
+  border: 0;
+  color: #3d4a54;
+  font: inherit;
+  font-size: 14px;
+  text-decoration: underline;
+}
+
+.eaa-r-demo ol {
+  list-style: none;
+  display: grid;
+  gap: 6px;
+}
+
+.eaa-r-demo li button {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-align: left;
+  background: var(--cv-mint);
+  border: 0;
+  border-radius: 10px;
+  padding: 12px;
+  font: inherit;
+  font-size: 18px;
+  color: inherit;
+  touch-action: manipulation;
+}
+
+.eaa-r-tick {
+  flex: none;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: #fff;
+  color: #00aa46;
+  font-family: "Syne", sans-serif;
+  font-size: 14px;
+}
+
+.eaa-r-demo li button.done {
+  background: #f3f5f4;
+  color: #8a959c;
+}
+
+.eaa-r-demo li button.done .eaa-r-item {
+  text-decoration: line-through;
+}
+
+.eaa-r-demo li button.done .eaa-r-tick {
+  background: #00aa46;
+  color: #fff;
+}
+
+.eaa-r-buttons.compact button {
+  height: 72px;
+  min-height: 0;
+}
