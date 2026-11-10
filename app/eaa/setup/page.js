@@ -119,12 +119,6 @@ export default function Setup() {
         )}
       </section>
 
-      <section className="panel eaa-panel">
-        <h2>6 · Tim&apos;s breakfast</h2>
-        <Field label="Small line above" k="breakfastKicker" {...p} />
-        <Field label="Title" k="breakfastTitle" hint="Wrap words in *asterisks* to make them green." {...p} />
-        <Field label="Line underneath" k="breakfastSub" {...p} />
-      </section>
     </main>
   );
 }

@@ -4,7 +4,6 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import QRCode from "qrcode";
 import { SLIDES, leadAndRest, lines, splitEmphasis, useDeckChannel, useDeckConfig } from "@/lib/eaaDeck";
 import { useWakeLock } from "@/lib/event";
-import Breakfast from "./Breakfast";
 
 
 function useQr(url) {
@@ -208,21 +207,6 @@ function QuestionsSlide({ c, qr }) {
   );
 }
 
-function BreakfastSlide({ c }) {
-  return (
-    <div className="eaa-s eaa-breakfast">
-      <Breakfast />
-      <div className="eaa-breakfast-caption">
-        {c.breakfastKicker && <p className="eaa-q-kicker">{c.breakfastKicker}</p>}
-        <h1 className="eaa-h1">
-          <Em text={c.breakfastTitle} />
-        </h1>
-        {c.breakfastSub && <p className="eaa-breakfast-sub">{c.breakfastSub}</p>}
-      </div>
-    </div>
-  );
-}
-
 function enterFullscreen() {
   document.documentElement.requestFullscreen?.().catch(() => {});
 }
@@ -345,7 +329,6 @@ export default function Deck() {
           {slide === "agenda" && <AgendaSlide c={c} />}
           {slide === "demo" && <DemoSlide c={c} />}
           {slide === "questions" && <QuestionsSlide c={c} qr={qr} />}
-          {slide === "breakfast" && <BreakfastSlide c={c} />}
         </section>
       )}
 
