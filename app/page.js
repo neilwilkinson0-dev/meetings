@@ -74,6 +74,15 @@ export default function Home() {
             <span className="play-hint">Enter the stage →</span>
           </Link>
 
+          <Link href="/eaa" className="game-card marquee">
+            <h2>eAA 2026</h2>
+            <p>
+              Five slides: who I am, who Certiverse is, the agenda, a jump to
+              the live demo, then questions with a QR code to the free trial.
+            </p>
+            <span className="play-hint">Enter the stage →</span>
+          </Link>
+
           <div className="game-card marquee soon">
             <h2>Coming soon</h2>
             <p>The next game goes here. The stage is being built.</p>

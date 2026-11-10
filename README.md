@@ -32,6 +32,15 @@ nothing reaches the screen until you tap Show. The ice breaker has its own
 fun list (seeded from the Would You Rather questions, edited separately) and
 serious list.
 
+**eAA 2026** — a five-slide deck at `/eaa/deck`: intro (who I am), who
+Certiverse is, what I'll cover, a demo slide that opens the live demo in its own
+tab, and a questions slide with a QR code (defaults to
+`https://certiverse.com/#/trial`). Every word, the demo link, the QR target and
+the accent colour are editable at `/eaa/setup`; edits save in that browser
+(localStorage), so set it up on the presenting laptop. No Supabase needed.
+Keys: → / space / clicker = next, ← = back, 1–5 jump, F = full screen,
+D = reopen the demo tab. Defaults live in `lib/eaaDeck.js`.
+
 ## Stack
 
 Next.js 14 (App Router) · Supabase · Vercel — same shape as your other tools.
@@ -54,6 +63,9 @@ Next.js 14 (App Router) · Supabase · Vercel — same shape as your other tools
 - `/present/screen` — the big screen (click once to go full screen)
 - `/present/remote` — the phone remote
 - `/ask` — the audience question form the QR code points to
+- `/eaa` — eAA deck lobby
+- `/eaa/setup` — edit the deck's text, demo link and QR code target
+- `/eaa/deck` — the deck itself
 
 ## 1. Supabase setup
 
