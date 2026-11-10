@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import QRCode from "qrcode";
-import { lines, useDeckConfig } from "@/lib/eaaDeck";
+import { leadAndRest, lines, splitEmphasis, useDeckConfig } from "@/lib/eaaDeck";
 import { useWakeLock } from "@/lib/event";
 
 const SLIDES = ["intro", "certiverse", "agenda", "demo", "questions"];
@@ -32,33 +32,66 @@ function openDemo(url) {
   }
 }
 
-function IntroSlide({ c }) {
+const B = "/media/eaa/brand";
+
+// Text with *asterisk* words picked out in brand green.
+function Em({ text }) {
+  return splitEmphasis(text).map((p, i) => (p.em ? <em key={i}>{p.text}</em> : <span key={i}>{p.text}</span>));
+}
+
+function Img({ src, className, alt = "" }) {
+  // eslint-disable-next-line @next/next/no-img-element
+  return <img src={src} className={className} alt={alt} draggable={false} />;
+}
+
+function Logo() {
+  return <Img src={`${B}/logo.webp`} className="eaa-logo" alt="Certiverse" />;
+}
+
+// Mint side strip with a doodle and the mark at the foot, as on the
+// brand's section slides.
+function Strip({ doodle }) {
   return (
-    <div className="eaa-intro">
-      <div className="eaa-intro-text">
-        <p className="eaa-eyebrow">{c.eventName}</p>
-        <h1 className="eaa-talk">{c.talkTitle}</h1>
-        <div className="eaa-me">
+    <aside className="eaa-strip">
+      <Img src={doodle} className="eaa-strip-doodle" />
+      <span className="eaa-strip-mark">
+        <Img src={`${B}/mark.webp`} />
+      </span>
+    </aside>
+  );
+}
+
+function IntroSlide({ c }) {
+  const about = lines(c.aboutMe);
+  return (
+    <div className="eaa-s eaa-mint eaa-intro">
+      <Logo />
+      <div className="eaa-intro-body">
+        <div className="eaa-intro-text">
+          <h1 className="eaa-title">
+            <Em text={c.talkTitle} />
+          </h1>
           <h2 className="eaa-name">{c.name}</h2>
           <p className="eaa-role">
             {c.role}
-            {c.company && <span className="eaa-company"> · {c.company}</span>}
+            {c.company && <> <span className="eaa-bar">|</span> {c.company}</>}
           </p>
-          {lines(c.aboutMe).length > 0 && (
+          {about.length > 0 && (
             <ul className="eaa-about">
-              {lines(c.aboutMe).map((l, i) => (
+              {about.map((l, i) => (
                 <li key={i}>{l}</li>
               ))}
             </ul>
           )}
+          {c.eventName && <p className="eaa-pill">{c.eventName}</p>}
         </div>
+        {c.photo && (
+          <div className="eaa-photo-card">
+            <Img src={c.photo} className="eaa-photo" alt={c.name} />
+            <Img src={`${B}/shield-path.webp`} className="eaa-photo-doodle" />
+          </div>
+        )}
       </div>
-      {c.photo && (
-        <div className="eaa-photo">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={c.photo} alt={c.name} />
-        </div>
-      )}
     </div>
   );
 }
@@ -66,19 +99,39 @@ function IntroSlide({ c }) {
 function CertiverseSlide({ c }) {
   const points = lines(c.certiversePoints);
   return (
-    <div className="eaa-block">
-      <p className="eaa-eyebrow">{c.company || "Certiverse"}</p>
-      <h1 className="eaa-h1">{c.certiverseTitle}</h1>
-      {c.certiverseTagline && <p className="eaa-lead">{c.certiverseTagline}</p>}
-      {points.length > 0 && (
-        <div className="eaa-tiles">
-          {points.map((p, i) => (
-            <div className="eaa-tile" key={i} style={{ animationDelay: `${120 + i * 90}ms` }}>
-              {p}
-            </div>
-          ))}
-        </div>
-      )}
+    <div className="eaa-s eaa-white eaa-about-cv">
+      <aside className="eaa-ddd">
+        {[
+          ["define", "Define"],
+          ["develop", "Develop"],
+          ["deliver", "Deliver"],
+        ].map(([img, label], i) => (
+          <figure key={img} style={{ animationDelay: `${100 + i * 120}ms` }}>
+            <Img src={`${B}/${img}.webp`} />
+            <figcaption>{label}</figcaption>
+          </figure>
+        ))}
+        <Img src={`${B}/mark.webp`} className="eaa-corner-mark" />
+      </aside>
+      <div className="eaa-panel-mint">
+        <h1 className="eaa-h1">
+          <Em text={c.certiverseTitle} />
+        </h1>
+        <ul className="eaa-arrows">
+          {points.map((p, i) => {
+            const { lead, rest } = leadAndRest(p);
+            return (
+              <li key={i} style={{ animationDelay: `${150 + i * 90}ms` }}>
+                <Img src={`${B}/arrow.webp`} className="eaa-arrow" />
+                <p>
+                  {lead && <strong>{lead} </strong>}
+                  {rest}
+                </p>
+              </li>
+            );
+          })}
+        </ul>
+      </div>
     </div>
   );
 }
@@ -86,60 +139,76 @@ function CertiverseSlide({ c }) {
 function AgendaSlide({ c }) {
   const items = lines(c.agendaItems);
   return (
-    <div className="eaa-block">
-      <p className="eaa-eyebrow">Today</p>
-      <h1 className="eaa-h1">{c.agendaTitle}</h1>
-      <ol className="eaa-agenda">
-        {items.map((item, i) => (
-          <li key={i} style={{ animationDelay: `${120 + i * 90}ms` }}>
-            <span className="eaa-num">{String(i + 1).padStart(2, "0")}</span>
-            <span>{item}</span>
-          </li>
-        ))}
-      </ol>
+    <div className="eaa-s eaa-white eaa-with-strip">
+      <Strip doodle={`${B}/squiggle.svg`} />
+      <div className="eaa-strip-main">
+        <h1 className="eaa-h1">
+          <Em text={c.agendaTitle} />
+        </h1>
+        <ol className="eaa-agenda">
+          {items.map((item, i) => (
+            <li key={i} style={{ animationDelay: `${120 + i * 90}ms` }}>
+              <span className="eaa-num">{String(i + 1).padStart(2, "0")}</span>
+              <span>{item}</span>
+            </li>
+          ))}
+        </ol>
+      </div>
+      <Img src={`${B}/stars.webp`} className="eaa-stars" />
     </div>
   );
 }
 
 function DemoSlide({ c }) {
   return (
-    <div className="eaa-demo">
-      <p className="eaa-eyebrow">Live demo</p>
-      <h1 className="eaa-h1 eaa-big">{c.demoTitle}</h1>
-      {c.demoSubtitle && <p className="eaa-lead">{c.demoSubtitle}</p>}
-      <button
-        className="eaa-demo-btn"
-        onClick={(e) => {
-          e.stopPropagation();
-          openDemo(c.demoUrl);
-        }}
-      >
-        Open the demo ↗
-      </button>
-      <p className="eaa-hint">Press D or Enter to open it again · → for questions when you&apos;re back</p>
+    <div className="eaa-s eaa-white eaa-with-strip">
+      <Strip doodle={`${B}/deliver.webp`} />
+      <div className="eaa-strip-main">
+        <p className="eaa-kicker">Live demo</p>
+        <h1 className="eaa-h1 eaa-big">
+          <Em text={c.demoTitle} />
+        </h1>
+        {c.demoSubtitle && <p className="eaa-sub">{c.demoSubtitle}</p>}
+        <button
+          className="eaa-demo-btn"
+          onClick={(e) => {
+            e.stopPropagation();
+            openDemo(c.demoUrl);
+          }}
+        >
+          Open the demo →
+        </button>
+        <p className="eaa-hint">Press D or Enter to open it again · → for questions when you&apos;re back</p>
+      </div>
+      <Img src={`${B}/stars.webp`} className="eaa-stars" />
     </div>
   );
 }
 
 function QuestionsSlide({ c, qr }) {
   return (
-    <div className="eaa-questions">
-      <div>
-        <h1 className="eaa-h1 eaa-big">{c.questionsTitle}</h1>
-        {c.questionsSubtitle && <p className="eaa-lead">{c.questionsSubtitle}</p>}
-        <p className="eaa-sign">
-          {c.name}
-          {c.company && <span> · {c.company}</span>}
-        </p>
-      </div>
-      {qr && (
-        <div className="eaa-qr">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={qr} alt={`QR code: ${c.qrUrl}`} />
-          {c.qrLabel && <p className="eaa-qr-label">{c.qrLabel}</p>}
-          {c.showQrUrl && <p className="eaa-qr-url">{c.qrUrl.replace(/^https?:\/\//, "")}</p>}
+    <div className="eaa-s eaa-mint eaa-questions">
+      <Logo />
+      <div className="eaa-q-body">
+        <div>
+          {c.questionsKicker && <p className="eaa-q-kicker">{c.questionsKicker}</p>}
+          <h1 className="eaa-h1 eaa-big">
+            <Em text={c.questionsTitle} />
+          </h1>
+          <div className="eaa-contact">
+            <p className="eaa-contact-name">{c.name}</p>
+            {c.email && <p>{c.email}</p>}
+          </div>
         </div>
-      )}
+        {qr && (
+          <div className="eaa-qr">
+            <Img src={`${B}/badge.webp`} className="eaa-qr-badge" />
+            <Img src={qr} className="eaa-qr-img" alt={`QR code: ${c.qrUrl}`} />
+            {c.qrLabel && <p className="eaa-qr-label">{c.qrLabel}</p>}
+            {c.showQrUrl && <p className="eaa-qr-url">{c.qrUrl.replace(/^https?:\/\//, "")}</p>}
+          </div>
+        )}
+      </div>
     </div>
   );
 }
@@ -251,7 +320,6 @@ export default function Deck() {
   return (
     <main
       className={`eaa-deck ${idle ? "eaa-idle" : ""}`}
-      style={{ "--eaa-accent": c.accent }}
       onClick={(e) => {
         if (e.target.closest("button, a")) return;
         // Left third goes back, the rest goes forward.
@@ -259,7 +327,6 @@ export default function Deck() {
       }}
       onDoubleClick={enterFullscreen}
     >
-      <div className="eaa-glow" aria-hidden />
       {ready && (
         <section className="eaa-slide" key={slide}>
           {slide === "intro" && <IntroSlide c={c} />}
@@ -270,23 +337,19 @@ export default function Deck() {
         </section>
       )}
 
-      <footer className="eaa-footer">
-        <span className="eaa-footer-brand">{c.company}</span>
-        <div className="eaa-dots">
-          {SLIDES.map((s, n) => (
-            <button
-              key={s}
-              className={n === i ? "on" : ""}
-              aria-label={`Slide ${n + 1}`}
-              onClick={(e) => {
-                e.stopPropagation();
-                go(n);
-              }}
-            />
-          ))}
-        </div>
-        <span className="eaa-footer-event">{c.eventName}</span>
-      </footer>
+      <div className="eaa-dots">
+        {SLIDES.map((s, n) => (
+          <button
+            key={s}
+            className={n === i ? "on" : ""}
+            aria-label={`Slide ${n + 1}`}
+            onClick={(e) => {
+              e.stopPropagation();
+              go(n);
+            }}
+          />
+        ))}
+      </div>
 
       <div className="eaa-controls">
         <button onClick={(e) => (e.stopPropagation(), toggleFullscreen())}>⛶ Full screen (F)</button>

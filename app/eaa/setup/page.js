@@ -69,31 +69,37 @@ export default function Setup() {
 
       <section className="panel eaa-panel">
         <h2>1 · Intro — who I am</h2>
-        <Field label="Event" k="eventName" {...p} />
-        <Field label="Talk title" k="talkTitle" {...p} />
+        <Field label="Event" k="eventName" {...p} hint="Shown in the green pill on the intro slide." />
+        <Field label="Talk title" k="talkTitle" hint="Wrap words in *asterisks* to make them green." {...p} />
         <Field label="Your name" k="name" {...p} />
         <Field label="Role" k="role" {...p} />
         <Field label="Company" k="company" {...p} />
+        <Field label="Email" k="email" {...p} hint="Shown on the questions slide." />
         <Field label="Photo URL" k="photo" {...p} hint="Leave empty to hide the photo." />
         <Field label="About me (one line each)" k="aboutMe" multiline {...p} />
       </section>
 
       <section className="panel eaa-panel">
         <h2>2 · Who Certiverse is</h2>
-        <Field label="Heading" k="certiverseTitle" {...p} />
-        <Field label="Tagline" k="certiverseTagline" multiline {...p} />
-        <Field label="Points (one per line)" k="certiversePoints" multiline {...p} />
+        <Field label="Heading" k="certiverseTitle" hint="Wrap words in *asterisks* to make them green." {...p} />
+        <Field
+          label="Points (one per line)"
+          k="certiversePoints"
+          multiline
+          hint="The first sentence of each line is shown in bold."
+          {...p}
+        />
       </section>
 
       <section className="panel eaa-panel">
         <h2>3 · What I&apos;ll talk about</h2>
-        <Field label="Heading" k="agendaTitle" {...p} />
+        <Field label="Heading" k="agendaTitle" hint="Wrap words in *asterisks* to make them green." {...p} />
         <Field label="Agenda (one per line)" k="agendaItems" multiline {...p} />
       </section>
 
       <section className="panel eaa-panel">
         <h2>4 · Demo</h2>
-        <Field label="Heading" k="demoTitle" {...p} />
+        <Field label="Heading" k="demoTitle" hint="Wrap words in *asterisks* to make them green." {...p} />
         <Field label="Subheading" k="demoSubtitle" {...p} />
         <Field label="Demo URL" k="demoUrl" type="url" {...p} hint="Opens in its own tab." />
         <Check label="Open the demo tab automatically when I move onto this slide" k="autoOpenDemo" {...p} />
@@ -101,8 +107,8 @@ export default function Setup() {
 
       <section className="panel eaa-panel">
         <h2>5 · Questions + QR code</h2>
-        <Field label="Heading" k="questionsTitle" {...p} />
-        <Field label="Subheading" k="questionsSubtitle" {...p} />
+        <Field label="Small line above" k="questionsKicker" {...p} />
+        <Field label="Heading" k="questionsTitle" hint="Wrap words in *asterisks* to make them green." {...p} />
         <Field label="QR code links to" k="qrUrl" type="url" {...p} />
         <Field label="Text under the QR code" k="qrLabel" {...p} />
         <Check label="Show the link under the QR code" k="showQrUrl" {...p} />
@@ -115,13 +121,6 @@ export default function Setup() {
         )}
       </section>
 
-      <section className="panel eaa-panel">
-        <h2>Look</h2>
-        <label className="eaa-field">
-          <span>Accent colour</span>
-          <input type="color" value={config.accent} onChange={(e) => update({ accent: e.target.value })} />
-        </label>
-      </section>
     </main>
   );
 }

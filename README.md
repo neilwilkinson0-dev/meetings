@@ -35,8 +35,10 @@ serious list.
 **eAA 2026** — a five-slide deck at `/eaa/deck`: intro (who I am), who
 Certiverse is, what I'll cover, a demo slide that opens the live demo in its own
 tab, and a questions slide with a QR code (defaults to
-`https://certiverse.com/#/trial`). Every word, the demo link, the QR target and
-the accent colour are editable at `/eaa/setup`; edits save in that browser
+`https://certiverse.com/#/trial`). Styled to the Certiverse brand (mint/white, Syne +
+Roboto, the green line doodles in `public/media/eaa/brand`). Every word, the
+demo link and the QR target are editable at `/eaa/setup`; wrap words in
+`*asterisks*` to colour them green; edits save in that browser
 (localStorage), so set it up on the presenting laptop. No Supabase needed.
 Keys: → / space / clicker = next, ← = back, 1–5 jump, F = full screen,
 D = reopen the demo tab. Defaults live in `lib/eaaDeck.js`.
