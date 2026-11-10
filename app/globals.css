@@ -2729,6 +2729,18 @@ button {
   animation: eaa-in 0.5s ease both;
 }
 
+.eaa-agenda.two {
+  max-width: 66vw;
+  grid-template-rows: repeat(var(--rows), auto);
+  grid-auto-flow: column;
+  column-gap: 5vw;
+  row-gap: 2vh;
+}
+
+.eaa-agenda.two li {
+  padding-bottom: 2vh;
+}
+
 .eaa-num {
   font-family: "Syne", sans-serif;
   font-weight: 600;

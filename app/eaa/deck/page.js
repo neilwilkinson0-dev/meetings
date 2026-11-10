@@ -36,7 +36,23 @@ const B = "/media/eaa/brand";
 
 // Text with *asterisk* words picked out in brand green.
 function Em({ text }) {
-  return splitEmphasis(text).map((p, i) => (p.em ? <em key={i}>{p.text}</em> : <span key={i}>{p.text}</span>));
+  return splitEmphasis(text).map((p, i) => {
+    const Tag = p.em ? "em" : "span";
+    return <Tag key={i}>{noBreakHyphens(p.text)}</Tag>;
+  });
+}
+
+// Keep words like "AI-assisted" on one line instead of breaking at the hyphen.
+function noBreakHyphens(text) {
+  return text.split(/(\S+-\S+)/).map((w, i) =>
+    i % 2 ? (
+      <span key={i} style={{ whiteSpace: "nowrap" }}>
+        {w}
+      </span>
+    ) : (
+      w
+    )
+  );
 }
 
 function Img({ src, className, alt = "" }) {
@@ -145,7 +161,10 @@ function AgendaSlide({ c }) {
         <h1 className="eaa-h1">
           <Em text={c.agendaTitle} />
         </h1>
-        <ol className="eaa-agenda">
+        <ol
+          className={`eaa-agenda ${items.length > 5 ? "two" : ""}`}
+          style={{ "--rows": Math.ceil(items.length / 2) }}
+        >
           {items.map((item, i) => (
             <li key={i} style={{ animationDelay: `${120 + i * 90}ms` }}>
               <span className="eaa-num">{String(i + 1).padStart(2, "0")}</span>
