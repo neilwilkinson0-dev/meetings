@@ -69,6 +69,7 @@ Next.js 14 (App Router) · Supabase · Vercel — same shape as your other tools
 - `/eaa/setup` — edit the deck's text and QR code target
 - `/eaa/deck` — the deck itself
 - `/eaa/remote` — phone remote for the deck
+- `/eaa/print` — all slides as 16:9 pages; `?download` opens the save-as-PDF dialog
 
 ## 1. Supabase setup
 

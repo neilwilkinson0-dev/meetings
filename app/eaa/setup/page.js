@@ -59,6 +59,9 @@ export default function Setup() {
         <Link className="btn" href="/eaa/deck" target="_blank">
           Open the deck ↗
         </Link>
+        <a className="btn secondary" href="/eaa/print?download" target="_blank">
+          Download PDF
+        </a>
         <button
           className="btn secondary"
           onClick={() => confirm("Put every field back to its default?") && reset()}

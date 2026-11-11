@@ -3147,3 +3147,91 @@ button {
   height: 72px;
   min-height: 0;
 }
+
+/* eAA deck as a PDF (/eaa/print) */
+@page {
+  size: 1920px 1080px;
+  margin: 0;
+}
+
+.eaa-deck.eaa-print {
+  position: static;
+  overflow: visible;
+  background: #d9dedb;
+  user-select: auto;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+
+.eaa-print-bar {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 12px 20px;
+  background: #fff;
+  border-bottom: 1px solid #d5e9db;
+  font-size: 15px;
+}
+
+.eaa-print-bar span {
+  flex: 1;
+  color: #3d4a54;
+}
+
+.eaa-print-bar a {
+  color: var(--cv-green);
+}
+
+.eaa-print-btn,
+.eaa-pdf-link {
+  background: var(--cv-green, #005236);
+  color: #fff;
+  border: 0;
+  border-radius: 999px;
+  padding: 10px 20px;
+  font: inherit;
+  font-weight: 500;
+}
+
+.eaa-print-btn:disabled {
+  opacity: 0.5;
+}
+
+/* Slides are sized in vw/vh, so each page fills the window on screen and
+   the 1920×1080 page when printing. */
+.eaa-print-page {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  margin-bottom: 16px;
+  overflow: hidden;
+  background: #fff;
+}
+
+.eaa-print-page * {
+  animation: none !important;
+}
+
+@media print {
+  .eaa-deck.eaa-print {
+    background: none;
+  }
+  .eaa-print-bar {
+    display: none;
+  }
+  .eaa-print-page {
+    margin: 0;
+    break-after: page;
+  }
+  .eaa-print-page:last-of-type {
+    break-after: auto;
+  }
+  html:has(.eaa-print),
+  body:has(.eaa-print) {
+    min-height: 0;
+    background: none;
+  }
+}
