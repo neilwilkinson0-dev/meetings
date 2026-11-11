@@ -25,6 +25,11 @@ export default function Eaa() {
           </p>
           <span className="play-hint">Open the deck →</span>
         </Link>
+        <a href="/eaa/print?download" target="_blank" className="game-card marquee">
+          <h2>Download PDF</h2>
+          <p>All five slides as a 16:9 PDF, with your latest edits. Pick &ldquo;Save as PDF&rdquo; in the print dialog.</p>
+          <span className="play-hint">Get the PDF →</span>
+        </a>
         <Link href="/eaa/remote" className="game-card marquee">
           <h2>3. Phone remote</h2>
           <p>Open this on your phone to change slides from anywhere in the room.</p>
