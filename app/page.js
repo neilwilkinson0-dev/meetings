@@ -83,6 +83,18 @@ export default function Home() {
             <span className="play-hint">Enter the stage →</span>
           </Link>
 
+          <a
+            href="https://webmail.contentdevelopment.org.uk"
+            className="game-card marquee"
+          >
+            <h2>Webmail</h2>
+            <p>
+              Check the contentdevelopment.org.uk inbox. Opens the webmail
+              login page.
+            </p>
+            <span className="play-hint">Open webmail →</span>
+          </a>
+
           <div className="game-card marquee soon">
             <h2>Coming soon</h2>
             <p>The next game goes here. The stage is being built.</p>
