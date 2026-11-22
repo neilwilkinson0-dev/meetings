@@ -73,8 +73,13 @@ Next.js 14 (App Router) · Supabase · Vercel — same shape as your other tools
 
 ## 1. Supabase setup
 
-Use a new Supabase project (or a new set of tables in an existing one). In the
-SQL editor, run `supabase/schema.sql` for Would You Rather,
+The live tables now sit in the `meetings` schema of a Supabase project shared
+with other apps (the wardrobe repo's `supabase/migrations` creates them), and
+the client reads from that schema (`lib/supabaseClient.js`). The schema must be
+listed under Settings > Data API > Exposed schemas.
+
+To start fresh in a project of its own instead, set `DB_SCHEMA` to `"public"`
+and, in the SQL editor, run `supabase/schema.sql` for Would You Rather,
 `supabase/time_travel_schema.sql` for Time Travel, and
 `supabase/ideas_schema.sql` for the Ideas Board, and
 `supabase/event_schema.sql` for the Presenter (it also creates the public
